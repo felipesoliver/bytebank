@@ -3,7 +3,7 @@ import DashboardHero from "@/layouts/blocks/dashboard-hero"
 import BankStatement from "@/layouts/blocks/bank-statement"
 import { NextSeo } from "next-seo"
 import useStateController from "@/hooks/use-state-controller"
-import InvestimentCard from "@/layouts/blocks/investments/investment-card"
+import InvestmentsMf from "@/layouts/blocks/investments-mf"
 
 export default function InvestmentsPage() {
   const {authStatus} = useStateController()
@@ -16,7 +16,7 @@ export default function InvestmentsPage() {
           <AsideNav />
           <div className="lg:col-span-7 flex flex-col gap-5">
             <DashboardHero />
-            <InvestimentCard />
+            <InvestmentsMf />
           </div>
           <BankStatement />
         </div>
