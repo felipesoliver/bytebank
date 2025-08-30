@@ -1,0 +1,89 @@
+html,
+body {
+  position: relative;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--color-background);
+  color: var(--color-gray-dark);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+p,
+button,
+a,
+label,
+input {
+  color: currentColor;
+  font-family: var(--font-inter);
+}
+
+p,
+li {
+  font-size: var(--text-base);
+  line-height: var(--tw-leading, var(--text-base--line-height));
+}
+
+h1,
+h2,
+h3,
+h4,
+h5 {
+  color: currentColor;
+  font-family: var(--font-inter);
+  text-wrap: balance;
+}
+
+.heading-xs {
+  font-size: 0.8125rem;
+  line-height: 1;
+}
+
+.heading-base {
+  font-size: 1rem;
+  line-height: 1;
+}
+
+.heading-xl {
+  font-size: 1.25rem;
+  line-height: 1;
+}
+
+.heading-2xl {
+  font-size: 1.5625rem;
+  line-height: 1;
+}
+
+button,
+a {
+  cursor: pointer;
+  transition-property:
+    color, background-color, border-color, outline-color, text-decoration-color,
+    fill, stroke, --tw-gradient-from, --tw-gradient-via, --tw-gradient-to;
+  transition-timing-function: var(
+    --tw-ease,
+    var(--default-transition-timing-function)
+  );
+  transition-duration: var(--tw-duration, var(--default-transition-duration));
+}
+
+strong,
+b {
+  font-weight: var(--font-weight-bold);
+}
+
+picture {
+  display: contents;
+}
+
+svg,
+.icon {
+  flex: none;
+}
