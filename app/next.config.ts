@@ -7,6 +7,7 @@ const nextConfig: NextConfig = {
     titleProp: true,
     icon: true,
   },
+  output: 'standalone'
 };
 
 module.exports = withSvgr(nextConfig)
