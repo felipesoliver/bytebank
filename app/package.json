@@ -11,12 +11,14 @@
     "build-storybook": "storybook build"
   },
   "dependencies": {
+    "@reduxjs/toolkit": "^2.9.0",
     "next": "15.3.3",
     "next-plugin-svgr": "^1.1.10",
     "next-seo": "^5.5.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-icons": "^5.5.0",
+    "react-redux": "^9.2.0",
     "react-toastify": "^11.0.5",
     "tailwind-merge": "^2.3.0",
     "tailwind-variants": "^0.2.1"
