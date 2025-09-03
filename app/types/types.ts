@@ -1,43 +1,43 @@
 export interface ICommonLink {
-  text: string
-  url: string
-  blank: boolean
+  text: string;
+  url: string;
+  blank: boolean;
 }
 
 export interface ISocialLink {
-  type: string
-  url: string
-  blank: boolean
+  type: string;
+  url: string;
+  blank: boolean;
 }
 
 export type ICtaVariant =
-'green' |
-'green-inverted' |
-'orange' |
-'orange-inverted' |
-'black' |
-'black-inverted'
+  | 'green'
+  | 'green-inverted'
+  | 'orange'
+  | 'orange-inverted'
+  | 'black'
+  | 'black-inverted';
 
 export interface ICta {
-  variant: ICtaVariant
-  text: string
-  className?: string
+  variant: ICtaVariant;
+  text: string;
+  className?: string;
 }
 
 interface IOption {
-  value: string
-  label: string
+  value: string;
+  label: string;
 }
 
 export interface ICustomSelect {
-  options: IOption[]
-  placeholder?: string
-  onValueChange?: (value: string) => void
-  defaultValue?: string
-  className?: string
-  borderColor?: "blue" | "green"
-  label?: string
-  id?: string
+  options: IOption[];
+  placeholder?: string;
+  onValueChange?: (value: string) => void;
+  defaultValue?: string;
+  className?: string;
+  borderColor?: 'blue' | 'green';
+  label?: string;
+  id?: string;
 }
 
 export interface IButton extends React.ButtonHTMLAttributes<HTMLButtonElement> {
@@ -52,35 +52,36 @@ export interface IButton extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 export interface IInput extends React.InputHTMLAttributes<HTMLInputElement> {
-  className?: string
-  error?: string
-  label?: string
-  id?: string
-  labelStyle?:string
+  className?: string;
+  error?: string;
+  label?: string;
+  id?: string;
+  labelStyle?: string;
 }
 
 export interface IBankStatementItem {
-  date: string
-  month: string
-  amount: number
-  type: 'deposit' | 'transfer'
+  date: string;
+  month: string;
+  amount: number;
+  type: string;
+  id?: number;
 }
 
 export interface IBankStatement {
-  title: string
-  subtitle: string
-  transactions: IBankStatementItem[]
+  title: string;
+  subtitle: string;
+  transactions: IBankStatementItem[];
 }
 
 interface ITransactionType {
-  label: string
-  value: string
+  label: string;
+  value: string;
 }
 
 export interface ITransaction {
-  title: string
-  transactionType: ITransactionType[]
-  placeholderInput: string
-  placeholderSelect: string
-  placeholderDate: string
+  title: string;
+  transactionType: ITransactionType[];
+  placeholderInput: string;
+  placeholderSelect: string;
+  placeholderDate: string;
 }

@@ -2,17 +2,19 @@ import { useState } from 'react';
 
 import useLocalStorage from '@/hooks/use-local-storage';
 
-import { TransactionFormProps } from './types'
-import useStateController from '@/hooks/use-state-controller'
-import { getCurrentMonth, getCurrentDateShort } from '@/utils/date'
-import CustomSelect from '@/components/select'
-import Input from '@/components/input'
-import Button from '@/components/button'
-import { IBankStatement, IBankStatementItem } from '@/types/types'
-import { getBalanceByBankStatement } from '@/utils/bank-statement-calc'
-import { bankStatementData } from '@/data/global-data'
+import { TransactionFormProps } from './types';
+import useStateController from '@/hooks/use-state-controller';
+import { getCurrentMonth, getCurrentDateShort } from '@/utils/date';
+import CustomSelect from '@/components/select';
+import Input from '@/components/input';
+import Button from '@/components/button';
+import { IBankStatement, IBankStatementItem } from '@/types/types';
+import { getBalanceByBankStatement } from '@/utils/bank-statement-calc';
+import { bankStatementData } from '@/data/global-data';
 
-import {toast} from 'react-toastify'
+import { toast } from 'react-toastify';
+import { useDispatch } from 'react-redux';
+import { addTransaction } from '@/features/transactions/transactionSlice';
 
 const TransactionForm = ({
   transactionType,
@@ -25,28 +27,32 @@ const TransactionForm = ({
   );
   const { triggerRefresh } = useStateController();
 
-  const { transactions } = bankStatementData as IBankStatement
-  const { getValue: storedBalance } = useLocalStorage('statement', transactions)
-  const calculatedBalance = getBalanceByBankStatement(storedBalance())
+  const { transactions } = bankStatementData as IBankStatement;
+  const { getValue: storedBalance } = useLocalStorage(
+    'statement',
+    transactions,
+  );
+  const calculatedBalance = getBalanceByBankStatement(storedBalance());
 
-
-  const [selectedTransaction, setSelectedTransaction] = useState<string>('')
-  const [amount, setAmount] = useState<string>('')
-
+  const [selectedTransaction, setSelectedTransaction] = useState<string>('');
+  const [amount, setAmount] = useState<string>('');
 
   const isInsufficientBalance = () =>
-  selectedTransaction === 'transfer' && (calculatedBalance - Number(amount)) < 0
+    selectedTransaction === 'transfer' &&
+    calculatedBalance - Number(amount) < 0;
 
   function showInsufficientBalanceMessage() {
-    toast.warning('Saldo insuficiente')
+    toast.warning('Saldo insuficiente');
   }
+
+  const dispatch = useDispatch();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
     if (isInsufficientBalance()) {
-      showInsufficientBalanceMessage()
-      return
+      showInsufficientBalanceMessage();
+      return;
     }
 
     const newTransaction = {
@@ -56,12 +62,21 @@ const TransactionForm = ({
       date: getCurrentDateShort,
     } as IBankStatementItem;
 
-    setValue([...storedValue, newTransaction])
-    toast.success('Transação realizada com sucesso!')
-    triggerRefresh()
-    setSelectedTransaction('')
-    setAmount('')
-  }
+    dispatch(
+      addTransaction({
+        type: selectedTransaction,
+        month: getCurrentMonth.replace(/^./, (str) => str.toUpperCase()),
+        amount: Number(amount),
+        date: getCurrentDateShort,
+      }),
+    );
+
+    setValue([...storedValue, newTransaction]);
+    toast.success('Transação realizada com sucesso!');
+    triggerRefresh();
+    setSelectedTransaction('');
+    setAmount('');
+  };
 
   return (
     <form
