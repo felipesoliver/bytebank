@@ -1,10 +1,10 @@
-import { NextSeo } from "next-seo"
-import AsideNav from "@/layouts/blocks/aside-nav"
-import useStateController from "@/hooks/use-state-controller"
-import Crud from "@/layouts/blocks/crud"
+import { NextSeo } from 'next-seo';
+import AsideNav from '@/layouts/blocks/aside-nav';
+import useStateController from '@/hooks/use-state-controller';
+import Crud from '@/layouts/blocks/crud';
 
 export default function TransfersPage() {
-  const {authStatus, refreshExtract} = useStateController()
+  const { authStatus, refreshExtract } = useStateController();
 
   return (
     <>
@@ -18,5 +18,5 @@ export default function TransfersPage() {
         </div>
       )}
     </>
-  )
+  );
 }
