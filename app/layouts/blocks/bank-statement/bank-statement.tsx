@@ -9,6 +9,7 @@ import DeleteIcon from '@/assets/icons/delete.svg';
 import Link from 'next/link';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store';
+import { currencyFormatedToReal } from '@/utils/currency';
 
 const BankStatement = () => {
   const { title, transactions } = bankStatementData as IBankStatement;
@@ -49,9 +50,7 @@ const BankStatement = () => {
               </p>
               <span className="text-xs text-[#8B8B8B]">{transaction.date}</span>
             </div>
-            <span className="font-semibold">
-              {`${transaction.type !== 'deposit' ? '-' : ''}R$ ${transaction.amount}`}
-            </span>
+            <span className="font-semibold">{`${currencyFormatedToReal(transaction.amount)}`}</span>
           </li>
         ))}
       </ul>
