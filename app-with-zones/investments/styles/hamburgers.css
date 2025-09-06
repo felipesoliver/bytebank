@@ -1,0 +1,101 @@
+.hamburger {
+  @apply p-0 w-10 h-10;
+}
+
+.hamburger-box {
+  @apply inline-block relative w-5 h-6;
+}
+
+.hamburger-inner {
+  @apply w-5 h-[0.125rem] bg-current rounded-none absolute;
+  @apply block absolute transition-transform;
+  @apply duration-[220ms] top-1/2 ml-0.5;
+  transition-timing-function: cubic-bezier(0.55, 0.055, 0.675, 0.19);
+}
+
+.hamburger-inner::before,
+.hamburger-inner::after {
+  @apply content-[''] block h-[0.125rem] bg-current rounded-none absolute;
+  @apply transition-all duration-[220ms] ease-out;
+}
+
+.hamburger-inner::before {
+  @apply -top-[0.375rem] w-full;
+  transition:
+    top 0.1s 0.25s ease-in,
+    opacity 0.1s ease-in;
+}
+.hamburger-inner::after {
+  @apply -bottom-[0.375rem] w-full;
+  transition:
+    bottom 0.1s 0.25s ease-in,
+    transform 0.22s cubic-bezier(0.55, 0.055, 0.675, 0.19);
+}
+
+.hamburger.is-active .hamburger-inner,
+.hamburger.is-active .hamburger-inner::before,
+.hamburger.is-active .hamburger-inner::after {
+  @apply bg-current w-5;
+}
+
+.hamburger.is-active .hamburger-inner {
+  @apply rotate-[225deg] delay-[0.12s];
+  transition-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+}
+
+.hamburger.is-active .hamburger-inner::before {
+  @apply top-0 opacity-0;
+  transition:
+    top 0.1s ease-out,
+    opacity 0.1s 0.12s ease-out;
+}
+
+.hamburger.is-active .hamburger-inner::after {
+  @apply bottom-0 rotate-[-90deg];
+  transition:
+    bottom 0.1s ease-out,
+    transform 0.22s 0.12s cubic-bezier(0.215, 0.61, 0.355, 1);
+}
+
+/*
+   * Squeeze
+   */
+
+.hamburger--squeeze .hamburger-inner {
+  transition-duration: 0.075s;
+  transition-timing-function: cubic-bezier(0.55, 0.055, 0.675, 0.19);
+}
+
+.hamburger--squeeze .hamburger-inner::before {
+  transition:
+    top 0.075s 0.12s ease,
+    opacity 0.075s ease;
+}
+
+.hamburger--squeeze .hamburger-inner::after {
+  transition:
+    bottom 0.075s 0.12s ease,
+    transform 0.075s cubic-bezier(0.55, 0.055, 0.675, 0.19);
+}
+
+.hamburger--squeeze.is-active .hamburger-inner {
+  transform: rotate(0deg);
+  transition-delay: 0.12s;
+  transition-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+}
+
+.hamburger--squeeze.is-active .hamburger-inner::before {
+  top: 0;
+  opacity: 0;
+  transition:
+    top 0.075s ease,
+    opacity 0.075s 0.12s ease;
+}
+
+.hamburger--squeeze.is-active .hamburger-inner::after {
+  bottom: 0;
+  transform: rotate(0deg);
+  transition:
+    bottom 0.075s ease,
+    transform 0.075s 0.12s cubic-bezier(0.215, 0.61, 0.355, 1);
+}

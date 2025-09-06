@@ -1,0 +1,117 @@
+@import "tailwindcss";
+@import './base.css' layer(base);
+@import './utilities.css';
+@import './hamburgers.css';
+
+@theme {
+  /* COLORS */
+  --color-*: initial;
+  --color-current: currentColor;
+
+  --color-black: #000000;
+  --color-white: #FFFFFF;
+
+  --color-green: #47A138;
+  --color-green-light: #E4EDE3;
+  --color-green-dark: #004D61;
+
+  --color-blue-light: #438B9D;
+
+  --color-gray-lightness: #F2F2F2;
+  --color-gray-light: #F8F8F8;
+  --color-gray-medium: #CBCBCB;
+  --color-gray: #DEE9EA;
+  --color-gray-dark: #444444;
+
+  --color-orange: #FF5031;
+
+  --color-error: #BF1313;
+
+  /* COLORS - VARIABLES */
+  --color-primary: var(--color-green-dark);
+  --color-secondary: var(--color-green-light);
+  --color-background: var(--color-green-light);
+
+  --color-accent: var(--color-black);
+  --color-accent-text: var(--color-white);
+  --color-on-hover: var(--color-primary);
+
+  /* COLORS - INPUT */
+  --color-input-background: var(--color-white);
+  --color-input-border: var(--color-green);
+  --color-input-placeholder: var(--color-gray);
+  --color-input-text: var(--color-gray-dark);
+  --color-input-error: var(--color-red);
+
+  /* COLORS - CURRENT */
+  --color-current: currentColor;
+  --color-current-hover: var(--color-on-hover);
+  --color-current-primary: var(--color-primary);
+  --color-current-secondary: var(--color-secondary);
+  --color-current-background: var(--color-background);
+  --color-current-accent: var(--color-accent);
+  --color-current-accent-text: var(--color-accent-text);
+  --color-current-input-background: var(--color-input-background);
+  --color-current-input-border: var(--color-input-border);
+  --color-current-input-placeholder: var(--color-input-placeholder);
+  --color-current-input-text: var(--color-input-text);
+
+  /* COLORS - BACKGROUND */
+  --color-background-service-options: var(--color-gray-services-bg);
+  --color-background-service-option: var(--color-white-service-bg);
+
+  /* SCREEN */
+  --breakpoint-xs: 375px;
+  --breakpoint-sm: 440px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 1024px;
+  --breakpoint-1.5lg: 1152px;
+  --breakpoint-xl: 1280px;
+  --breakpoint-1.5xl: 1440px;
+  --breakpoint-2xl: 1536px;
+  --breakpoint-3xl: 1920px;
+
+  /* FONT */
+  --font-inter: var(--font-inter);
+
+  /* FONT SIZE */
+  --text-1: 1rem; /* 16px */
+  --text-2: 1.25rem; /* 20px */
+  --text-2.5xl: 1.625rem; /* 26px */
+  --text-5.5xl: 3.25rem; /* 52px */
+  --text-6.5xl: 4rem; /* 64px */
+  --text-7.5xl: 5rem; /* 80px*/
+
+  /* TRANSITION */
+  --default-transition-timing-function: cubic-bezier(0, 0, 0.4, 1);
+  --default-transition-duration: 300ms;
+
+  /* SPACING */
+  --distance-small: --spacing(8);
+  --distance-medium: --spacing(24);
+
+  /* ANIMATION */
+  --animate-fadein: fadeIn 0.3s cubic-bezier(0.455, 0.03, 0.515, 0.955) forwards;
+  --animate-showup: showUp 0.2s ease-out forwards;
+
+  @keyframes fadeIn {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 100;
+    }
+  }
+
+  @keyframes showUp {
+    from {
+      opacity: 0;
+      transform: scale(0.95);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+}
+
