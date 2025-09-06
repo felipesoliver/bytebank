@@ -2,7 +2,6 @@
 
 import React from 'react'
 import { usePathname } from 'next/navigation'
-import Link from 'next/link'
 
 import { headerData } from '@/data/global-data'
 import { twMerge } from 'tailwind-merge'
@@ -25,14 +24,14 @@ const AsideNav = () => {
                 )
               }
             >
-               <Link href={item.url}
+              <a
+                href={item.url}
                 target={item.blank ? '_blank' : '_self'}
                 className='block text-center py-4'
                 aria-label={`Navegar para ${item.text}`}
-
               >
                 {item.text}
-              </Link>
+              </a>
             </li>
           ))}
         </ul>

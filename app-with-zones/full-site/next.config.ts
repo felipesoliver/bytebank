@@ -2,8 +2,9 @@
 import type { NextConfig } from "next";
 const withSvgr = require('next-plugin-svgr')
 
+const {NEXT_PUBLIC_INVESTMENTS_BASE_URL} = process.env
+
 const nextConfig: NextConfig = {
-  reactStrictMode: true,
   turbopack: {
     rules: {
       '*.svg': {
@@ -12,7 +13,18 @@ const nextConfig: NextConfig = {
       },
     },
   },
-  output: 'standalone'
+  async rewrites() {
+    return [
+      {
+        source: '/investments',
+        destination: `${NEXT_PUBLIC_INVESTMENTS_BASE_URL}/`,
+      },
+      {
+        source: "/investments-static/_next/:path+",
+        destination: `${NEXT_PUBLIC_INVESTMENTS_BASE_URL}/investments-static/_next/:path+`,
+      },
+    ];
+  },
 };
 
 module.exports = withSvgr(nextConfig)

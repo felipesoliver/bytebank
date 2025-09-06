@@ -7,8 +7,6 @@ import { IBankStatement, IBankStatementItem } from '@/types/types'
 import React, { useEffect, useState } from 'react'
 
 import EditIcon from '@/assets/icons/edit.svg'
-import DeleteIcon from '@/assets/icons/delete.svg'
-import Link from 'next/link'
 
 const BankStatement = () => {
   const { title, transactions } = bankStatementData as IBankStatement
@@ -21,18 +19,12 @@ const BankStatement = () => {
 
   return (
     <section className='group relative lg:col-span-3 rounded-lg bg-white px-6 py-8'>
-      <Link
-        className="absolute top-5 right-[3.25rem] lg:opacity-0 lg:group-hover:opacity-100 duration-200 transition-all"
-        href='/transfers'
-      >
-        <EditIcon className="w-6 h-6" />
-      </Link>
-      <Link
+      <a
         className="absolute top-5 right-5 lg:opacity-0 lg:group-hover:opacity-100 duration-200 transition-all"
         href='/transfers'
       >
-        <DeleteIcon className="w-6 h-6" />
-      </Link>
+        <EditIcon className="w-6 h-6" />
+      </a>
       <h2 className='text-[1.5625rem] font-semibold'>{title}</h2>
       <ul>
         {currentStatement.map((transaction, index) => (
