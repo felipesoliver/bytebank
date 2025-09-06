@@ -1,0 +1,52 @@
+
+<style>
+
+/* Esconde o SVG padrão da logo do Storybook */
+[data-testid="sidebar-header"] svg,
+.sidebar-header svg {
+  display: none !important;
+}
+/* Adiciona a logo customizada no lugar */
+[data-testid="sidebar-header"],
+.sidebar-header {
+  position: relative;
+}
+[data-testid="sidebar-header"]::before,
+.sidebar-header::before {
+  content: '';
+  display: block;
+  width: 120px;
+  height: 40px;
+  background: url('/logo.svg') no-repeat left center;
+  background-size: contain;
+  position: absolute;
+  left: 16px;
+  top: 8px;
+  z-index: 10;
+}
+/* Cores principais do topo e sidebar */
+.sb-header, [data-testid="sidebar-header"] {
+  background: #FFFFFF !important;
+  border-bottom: 1px solid #E6E6E6 !important;
+}
+
+div [data-radix-scroll-area-content] {
+  background: #004D61 !important;
+  color: #FFFFFF !important;
+}
+button[data-action="collapse-root"] {
+  color: #fff !important;
+    background: transparent !important;
+}
+
+button[data-action="collapse-root"] svg{
+  fill: #FFFFFF !important;
+}
+
+button[aria-label="Create a new story"] {
+  background: #47A138 !important;
+  color: #FFFFFF !important;
+}
+
+
+</style>

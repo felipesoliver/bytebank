@@ -1,0 +1,47 @@
+/* Customização manual do Storybook 9 */
+
+/* Força a logo no topo (ajuste se necessário) */
+[data-testid="sidebar-header"] img,
+.sidebar-header img,
+.sb-header .sb-brand img {
+  content: url('/logo.svg') !important;
+  width: 120px !important;
+  height: auto !important;
+  object-fit: contain !important;
+  background: none !important;
+}
+
+/* Cores principais */
+body, .sb-main, .sb-show-main, [data-testid="sidebar"] {
+  background: #F5F5F5 !important;
+}
+.sb-header, [data-testid="sidebar-header"] {
+  background: #FFFFFF !important;
+  border-bottom: 1px solid #E6E6E6 !important;
+}
+.sb-show-main, .sb-main {
+  background: #FFFFFF !important;
+  color: #222222 !important;
+}
+.sidebar-header, [data-testid="sidebar-header"] {
+  color: #0055A4 !important;
+}
+.sidebar-item.selected, .sidebar-item.selected * {
+  color: #0055A4 !important;
+}
+.sidebar-item, .sidebar-item * {
+  color: #999999 !important;
+}
+.sb-header, .sb-header * {
+  color: #0055A4 !important;
+}
+.sb-header .sb-brand {
+  font-size: 0 !important;
+}
+.sb-header .sb-brand:after {
+  content: 'Seu Projeto';
+  font-size: 18px;
+  color: #0055A4;
+  margin-left: 130px;
+  font-weight: bold;
+}
