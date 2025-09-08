@@ -120,7 +120,7 @@ const TransactionForm = ({
             <Button
               label="Concluir transação"
               onClick={() => {}}
-              primary="true"
+              variant="primary"
               className="bg-[var(--color-green-dark)] py-0 md:min-w-[200px]"
               type="submit"
               disabled={Number(amount) <= 0 || !selectedTransaction}
