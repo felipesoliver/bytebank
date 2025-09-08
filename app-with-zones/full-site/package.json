@@ -18,7 +18,9 @@
     "react-icons": "^5.5.0",
     "react-toastify": "^11.0.5",
     "tailwind-merge": "^2.3.0",
-    "tailwind-variants": "^0.2.1"
+    "tailwind-variants": "^0.2.1",
+    "@reduxjs/toolkit": "^2.9.0",
+    "react-redux": "^9.2.0"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",

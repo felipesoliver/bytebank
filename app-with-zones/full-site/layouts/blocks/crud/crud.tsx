@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { bankStatementData, transactionsData } from '@/data/global-data';
 import useLocalStorage from '@/hooks/use-local-storage';
 import {
@@ -16,7 +16,10 @@ import Input from '@/components/input';
 import { formatDate, formatMonth, toInputDateFormat } from '@/utils/date';
 import { getBalanceByBankStatement } from '@/utils/bank-statement-calc';
 
-import {toast} from 'react-toastify'
+import { toast } from 'react-toastify';
+import { RootState } from '@/store';
+import { useSelector } from 'react-redux';
+import { currencyFormatedToReal } from '@/utils/currency';
 
 const Crud = () => {
   const { subtitle, transactions } = bankStatementData as IBankStatement;
@@ -26,36 +29,31 @@ const Crud = () => {
     placeholderDate,
     placeholderInput,
   } = transactionsData as ITransaction;
-  const { storedValue, getValue, setValue } = useLocalStorage(
-    'statement',
-    transactions,
-  );
-  const [currentStatement, setCurrentStatement] =
-    useState<IBankStatementItem[]>(storedValue);
+  const { getValue, setValue } = useLocalStorage('statement', transactions);
+
   const [date, setDate] = useState<string>('');
   const [amount, setAmount] = useState<string>('');
   const [selectedTransaction, setSelectedTransaction] = useState<string>('');
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [currentEditing, setCurrentEditing] = useState<number>(-1);
 
-  const calculatedBalance = getBalanceByBankStatement(getValue())
-  
+  const calculatedBalance = getBalanceByBankStatement(getValue());
 
-  useEffect(() => {
-    setCurrentStatement(getValue());
-  }, [storedValue]);
+  const transactionsStore = useSelector(
+    (state: RootState) => state.transactions.transactions
+  );
 
   const editStatementItem = (index: number) => {
-  setIsEditing(true);
+    setIsEditing(true);
     setCurrentEditing(index);
-    const item = currentStatement[index];
-   setDate(toInputDateFormat(item.date));
+    const item = transactionsStore[index];
+    setDate(toInputDateFormat(item.date));
     setAmount(item.amount.toString());
     setSelectedTransaction(item.type);
   };
 
   const deleteStatementItem = (index: number) => {
-    setValue(currentStatement.filter((_, i) => i !== index));
+    setValue(transactionsStore.filter((_, i) => i !== index));
     toast.success('Transação excluída com sucesso');
   };
 
@@ -63,9 +61,11 @@ const Crud = () => {
     e.preventDefault();
 
     if (currentEditing === -1) return;
-    const updatedStatement = [...currentStatement];
+    const updatedStatement = [...transactionsStore];
 
-    const isInsufficientBalance = () => selectedTransaction === 'transfer' && (calculatedBalance - Number(amount)) < 0
+    const isInsufficientBalance = () =>
+      selectedTransaction === 'transfer' &&
+      calculatedBalance - Number(amount) < 0;
     if (isInsufficientBalance()) {
       toast.warning('Saldo insuficiente');
       return;
@@ -87,7 +87,7 @@ const Crud = () => {
     <section className="lg:col-span-3 rounded-lg bg-white px-6 py-8">
       <h2 className="text-[1.5625rem] font-semibold">{subtitle}</h2>
       <ul>
-        {currentStatement.map((transaction, index) => (
+        {transactionsStore.map((transaction, index) => (
           <li
             key={`transaction-${index}`}
             className="relative group flex flex-col gap-2 pt-6 pb-2 border-b border-green"
@@ -97,7 +97,7 @@ const Crud = () => {
                 className="flex flex-col lg:flex-row lg:items-center flex-wrap justify-between gap-7 lg:gap-3 min-h-[4.5625rem] py-4 lg:py-0"
                 onSubmit={handleSave}
               >
-                <div className='flex gap-8 md:gap-2 lg:gap-2 flex-col md:flex-row lg:flex-row'>
+                <div className="flex gap-8 md:gap-2 lg:gap-2 flex-col md:flex-row lg:flex-row">
                   <fieldset className="relative">
                     <label className="absolute -top-5 left-0 text-xs text-green">
                       {placeholderSelect}
@@ -189,7 +189,9 @@ const Crud = () => {
                   </span>
                 </div>
                 <span className="font-semibold">
-                  {`${transaction.type !== 'deposit' ? '-' : ''}R$ ${transaction.amount}`}
+                  <span className="font-semibold">{`${currencyFormatedToReal(
+                    transaction.amount
+                  )}`}</span>
                 </span>
               </>
             )}
