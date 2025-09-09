@@ -25,6 +25,7 @@ const nextConfig: NextConfig = {
       },
     ];
   },
+  output: "standalone"
 };
 
 module.exports = withSvgr(nextConfig)
