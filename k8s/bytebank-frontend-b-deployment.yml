@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bytebank-investments-frontend-b
+  labels:
+    app: bytebank-investments-frontend-b
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: bytebank-investments-frontend-b
+  template:
+    metadata:
+      labels:
+        app: bytebank-investments-frontend-b
+    spec:
+      containers:
+        - name: bytebank-investments-frontend-b
+          image: rukovis/bytebank-investments:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 3000

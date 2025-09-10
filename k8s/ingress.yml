@@ -1,0 +1,32 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: bytebank-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  rules:
+    - host: localhost
+      http:
+        paths:
+          - path: /frontend-a
+            pathType: Prefix
+            backend:
+              service:
+                name: bytebank-frontend-a-svc
+                port:
+                  number: 3000
+          - path: /frontend-b
+            pathType: Prefix
+            backend:
+              service:
+                name: bytebank-investments-frontend-b-svc
+                port:
+                  number: 3000
+          # - path: /api
+          #   pathType: Prefix
+          #   backend:
+          #     service:
+          #       name: backend-svc
+          #       port:
+          #         number: 8080
