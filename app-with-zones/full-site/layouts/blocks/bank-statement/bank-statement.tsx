@@ -1,3 +1,5 @@
+'use client';
+
 /* eslint-disable react-hooks/exhaustive-deps */
 import { bankStatementData } from '@/data/global-data';
 import useLocalStorage from '@/hooks/use-local-storage';

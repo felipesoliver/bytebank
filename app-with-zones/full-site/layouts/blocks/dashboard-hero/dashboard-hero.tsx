@@ -1,3 +1,5 @@
+'use client';
+
 import Eye from '@/assets/icons/eye.svg';
 import { accountData, dashboardHeroData } from '@/data/global-data';
 import { getCurrentDate } from '@/utils/date';
