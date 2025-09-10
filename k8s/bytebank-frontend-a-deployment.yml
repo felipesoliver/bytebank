@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bytebank-frontend-a
+  labels:
+    app: bytebank-frontend-a
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: bytebank-frontend-a
+  template:
+    metadata:
+      labels:
+        app: bytebank-frontend-a
+    spec:
+      containers:
+        - name: bytebank-frontend-a
+          image: rukovis/bytebank:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 3000

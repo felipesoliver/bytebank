@@ -1,0 +1,33 @@
+version: '3.9'
+
+services:
+  bytebank:
+    build: ../app-with-zones/full-site
+    image: bytebank:latest
+    container_name: bytebank
+    networks:
+      - bytebank-network
+    ports:
+      - "3000:3000"
+
+  bytebank-investments:
+    build: ../app-with-zones/investments
+    image: bytebank-investments:latest
+    container_name: bytebank-investments
+    networks:
+      - bytebank-network
+    ports:
+      - "3001:3000"
+
+  bytebank-api:
+    build: ../app-with-zones/api
+    image: bytebank-api:latest
+    container_name: bytebank-api
+    networks:
+      - bytebank-network
+    ports:
+      - "3002:3000"
+
+networks:
+  bytebank-network:
+    driver: bridge
