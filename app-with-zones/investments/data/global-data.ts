@@ -36,21 +36,25 @@ export const headerData = {
       text: 'Inicio',
       url: '/',
       blank: false,
+      mf: true,
     },
     {
       text: 'Transferências',
       url: '/transfers',
       blank: false,
+      mf: true,
     },
     {
       text: 'Investimentos',
       url: '/investments',
       blank: false,
+      mf: false,
     },
     {
       text: 'Outros serviços',
       url: '/services',
       blank: false,
+      mf: true,
     },
   ],
   subscribeCta: {
