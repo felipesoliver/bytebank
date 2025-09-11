@@ -23,8 +23,16 @@ const nextConfig: NextConfig = {
   async rewrites() {
     return [
       {
+        source: '/:path*',
+        destination: `/:path*`,
+      },
+      {
         source: '/investments',
-        destination: `${NEXT_PUBLIC_INVESTMENTS_BASE_URL}/`,
+        destination: `${NEXT_PUBLIC_INVESTMENTS_BASE_URL}/investments`,
+      },
+      {
+        source: "/investments/:path*",
+        destination: `${NEXT_PUBLIC_INVESTMENTS_BASE_URL}/investments/:path*`,
       },
       {
         source: "/investments-static/_next/:path+",
