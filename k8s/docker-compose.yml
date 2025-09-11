@@ -5,10 +5,15 @@ services:
     build: ../app-with-zones/full-site
     image: bytebank:latest
     container_name: bytebank
+    environment:
+      NEXT_PUBLIC_INVESTMENTS_BASE_URL: http://localhost:3001
     networks:
       - bytebank-network
     ports:
       - "3000:3000"
+    depends_on:
+      - bytebank-investments
+      - bytebank-api
 
   bytebank-investments:
     build: ../app-with-zones/investments
@@ -18,6 +23,8 @@ services:
       - bytebank-network
     ports:
       - "3001:3000"
+    depends_on:
+      - bytebank-api
 
   bytebank-api:
     build: ../app-with-zones/api
