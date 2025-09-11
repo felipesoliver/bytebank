@@ -52,7 +52,7 @@ then, run the development server at "/investments" directory:
 npm run dev
 ```
 
-open [http://localhost:4000](http://localhost:4000) with your browser to see the
+open [http://localhost:3001](http://localhost:3001) with your browser to see the
 result.
 
 ## Project Architecture Overview
