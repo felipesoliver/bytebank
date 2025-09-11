@@ -11,6 +11,7 @@ import EditIcon from '@/assets/icons/edit.svg';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store';
 import { currencyFormatedToReal } from '@/utils/currency';
+import Link from 'next/link';
 
 const BankStatement = () => {
   const { title, transactions } = bankStatementData as IBankStatement;
@@ -23,12 +24,12 @@ const BankStatement = () => {
 
   return (
     <section className="group relative lg:col-span-3 rounded-lg bg-white px-6 py-8">
-      <a
+      <Link
         className="absolute top-5 right-[3.25rem] lg:opacity-0 lg:group-hover:opacity-100 duration-200 transition-all"
         href="/transfers"
       >
         <EditIcon className="w-6 h-6" />
-      </a>
+      </Link>
 
       <h2 className="text-[1.5625rem] font-semibold">{title}</h2>
       <ul>
