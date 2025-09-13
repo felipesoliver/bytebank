@@ -35,6 +35,34 @@ const transactionSlice = createSlice({
 
       console.log('esse é o state', state.transactions);
     },
+    updateTransaction: (
+      state,
+      action: PayloadAction<{
+        id?: number;
+        updated: Partial<IBankStatementItem>;
+      }>
+    ) => {
+      const { id, updated } = action.payload;
+
+      const index = state.transactions.findIndex((t) => t.id === id);
+      if (index !== -1) {
+        const existing = state.transactions[index];
+
+        let amount = updated.amount ?? existing.amount;
+
+        if (updated.type && updated.type !== 'deposit') {
+          amount = -Math.abs(amount);
+        } else if (updated.type === 'deposit') {
+          amount = Math.abs(amount);
+        }
+
+        state.transactions[index] = {
+          ...existing,
+          ...updated,
+          amount,
+        };
+      }
+    },
   },
 });
 
@@ -51,5 +79,6 @@ export const selectBalance = createSelector(
     transactions.reduce((balance: number, t) => balance + t.amount, 0)
 );
 
-export const { addTransaction, removeTransaction } = transactionSlice.actions;
+export const { addTransaction, removeTransaction, updateTransaction } =
+  transactionSlice.actions;
 export default transactionSlice.reducer;
