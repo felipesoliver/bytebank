@@ -39,8 +39,6 @@ const Crud = () => {
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [currentEditing, setCurrentEditing] = useState<number>(-1);
 
-  const calculatedBalance = getBalanceByBankStatement(getValue());
-
   const transactionsStore = useSelector(
     (state: RootState) => state.transactions.transactions
   );
@@ -66,19 +64,11 @@ const Crud = () => {
     toast.success('Transação excluída com sucesso');
   };
 
-  const handleSave = (e: React.FormEvent) => {
+  const updateTransaction = (e: React.FormEvent) => {
     e.preventDefault();
 
     if (currentEditing === -1) return;
     const updatedStatement = [...transactionsStore];
-
-    const isInsufficientBalance = () =>
-      selectedTransaction === 'transfer' &&
-      calculatedBalance - Number(amount) < 0;
-    if (isInsufficientBalance()) {
-      toast.warning('Saldo insuficiente');
-      return;
-    }
 
     updatedStatement[currentEditing] = {
       type: selectedTransaction,
@@ -104,7 +94,7 @@ const Crud = () => {
             {isEditing && currentEditing === index ? (
               <form
                 className="flex flex-col lg:flex-row lg:items-center flex-wrap justify-between gap-7 lg:gap-3 min-h-[4.5625rem] py-4 lg:py-0"
-                onSubmit={handleSave}
+                onSubmit={updateTransaction}
               >
                 <div className="flex gap-8 md:gap-2 lg:gap-2 flex-col md:flex-row lg:flex-row">
                   <fieldset className="relative">
