@@ -2,9 +2,7 @@
 
 /* eslint-disable react-hooks/exhaustive-deps */
 import { bankStatementData } from '@/data/global-data';
-import useLocalStorage from '@/hooks/use-local-storage';
 import { IBankStatement, IBankStatementItem } from '@/types/types';
-import React, { useState } from 'react';
 
 import EditIcon from '@/assets/icons/edit.svg';
 
@@ -14,9 +12,7 @@ import { currencyFormatedToReal } from '@/utils/currency';
 import Link from 'next/link';
 
 const BankStatement = () => {
-  const { title, transactions } = bankStatementData as IBankStatement;
-  const { storedValue } = useLocalStorage('statement', transactions);
-  useState<IBankStatementItem[]>(storedValue);
+  const { title } = bankStatementData as IBankStatement;
 
   const transactionsStore = useSelector(
     (state: RootState) => state.transactions.transactions

@@ -25,6 +25,16 @@ const transactionSlice = createSlice({
         amount,
       });
     },
+    removeTransaction: (state, action: PayloadAction<number>) => {
+      console.log('to aqui dentro');
+      console.log('o payload é', action.payload);
+      console.log('transaction', state.transactions);
+      state.transactions = state.transactions.filter(
+        (t) => t.id !== action.payload
+      );
+
+      console.log('esse é o state', state.transactions);
+    },
   },
 });
 
@@ -41,5 +51,5 @@ export const selectBalance = createSelector(
     transactions.reduce((balance: number, t) => balance + t.amount, 0)
 );
 
-export const { addTransaction } = transactionSlice.actions;
+export const { addTransaction, removeTransaction } = transactionSlice.actions;
 export default transactionSlice.reducer;

@@ -20,6 +20,8 @@ import { toast } from 'react-toastify';
 import { RootState } from '@/store';
 import { useSelector } from 'react-redux';
 import { currencyFormatedToReal } from '@/utils/currency';
+import { useDispatch } from 'react-redux';
+import { removeTransaction } from '@/features/transactions/transactionSlice';
 
 const Crud = () => {
   const { subtitle, transactions } = bankStatementData as IBankStatement;
@@ -43,6 +45,8 @@ const Crud = () => {
     (state: RootState) => state.transactions.transactions
   );
 
+  const dispatch = useDispatch();
+
   const editStatementItem = (index: number) => {
     setIsEditing(true);
     setCurrentEditing(index);
@@ -52,8 +56,13 @@ const Crud = () => {
     setSelectedTransaction(item.type);
   };
 
-  const deleteStatementItem = (index: number) => {
-    setValue(transactionsStore.filter((_, i) => i !== index));
+  const deleteStatementItem = (id?: number) => {
+    if (typeof id !== 'number') {
+      toast.error('Erro ao excluir transação: ID inválido');
+      return;
+    }
+
+    dispatch(removeTransaction(id));
     toast.success('Transação excluída com sucesso');
   };
 
@@ -171,7 +180,9 @@ const Crud = () => {
                 </button>
                 <button
                   className="absolute top-2 right-0 lg:opacity-0 lg:group-hover:opacity-100 duration-200 transition-all"
-                  onClick={() => deleteStatementItem(index)}
+                  onClick={() =>
+                    deleteStatementItem(transactionsStore[index].id)
+                  }
                 >
                   <DeleteIcon className="w-6 h-6" />
                 </button>
