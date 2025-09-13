@@ -14,14 +14,16 @@ import Cta from '@/components/cta';
 import CustomSelect from '@/components/select';
 import Input from '@/components/input';
 import { formatDate, formatMonth, toInputDateFormat } from '@/utils/date';
-import { getBalanceByBankStatement } from '@/utils/bank-statement-calc';
 
 import { toast } from 'react-toastify';
 import { RootState } from '@/store';
 import { useSelector } from 'react-redux';
 import { currencyFormatedToReal } from '@/utils/currency';
 import { useDispatch } from 'react-redux';
-import { removeTransaction } from '@/features/transactions/transactionSlice';
+import {
+  removeTransaction,
+  updateTransaction,
+} from '@/features/transactions/transactionSlice';
 
 const Crud = () => {
   const { subtitle, transactions } = bankStatementData as IBankStatement;
@@ -64,19 +66,26 @@ const Crud = () => {
     toast.success('Transação excluída com sucesso');
   };
 
-  const updateTransaction = (e: React.FormEvent) => {
+  const update = (e: React.FormEvent) => {
     e.preventDefault();
 
     if (currentEditing === -1) return;
-    const updatedStatement = [...transactionsStore];
+    const transactionToUpdate = transactionsStore[currentEditing];
+    if (!transactionToUpdate) return;
 
-    updatedStatement[currentEditing] = {
+    const updatedFields: Partial<IBankStatementItem> = {
       type: selectedTransaction,
       month: formatMonth(date),
       amount: Number(amount),
       date: formatDate(date),
-    } as IBankStatementItem;
-    setValue(updatedStatement);
+    };
+
+    dispatch(
+      updateTransaction({
+        id: transactionToUpdate?.id,
+        updated: updatedFields,
+      })
+    );
     setCurrentEditing(-1);
     setIsEditing(false);
     toast.success('Transação atualizada com sucesso');
@@ -94,7 +103,7 @@ const Crud = () => {
             {isEditing && currentEditing === index ? (
               <form
                 className="flex flex-col lg:flex-row lg:items-center flex-wrap justify-between gap-7 lg:gap-3 min-h-[4.5625rem] py-4 lg:py-0"
-                onSubmit={updateTransaction}
+                onSubmit={update}
               >
                 <div className="flex gap-8 md:gap-2 lg:gap-2 flex-col md:flex-row lg:flex-row">
                   <fieldset className="relative">
