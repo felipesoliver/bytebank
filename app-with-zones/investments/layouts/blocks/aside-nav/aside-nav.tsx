@@ -5,6 +5,7 @@ import { usePathname } from 'next/navigation'
 
 import { headerData } from '@/data/global-data'
 import { twMerge } from 'tailwind-merge'
+import Link from 'next/link'
 
 const AsideNav = () => {
   const {loggedInMenu} = headerData
@@ -24,14 +25,26 @@ const AsideNav = () => {
                 )
               }
             >
-              <a
-                href={item.url}
-                target={item.blank ? '_blank' : '_self'}
-                className='block text-center py-4'
-                aria-label={`Navegar para ${item.text}`}
-              >
-                {item.text}
-              </a>
+              {item.mf ? (
+                <a
+                  href={item.url}
+                  target={item.blank ? '_blank' : '_self'}
+                  className='block text-center py-4'
+                  aria-label={`Navegar para ${item.text}`}
+                >
+                  {item.text}
+                </a>
+              ) : (
+                <Link
+                  href={item.url}
+                  target={item.blank ? '_blank' : '_self'}
+                  className='block text-center py-4'
+                  aria-label={`Navegar para ${item.text}`}
+                  passHref
+                >
+                  {item.text}
+                </Link>
+              )}
             </li>
           ))}
         </ul>

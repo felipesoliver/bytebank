@@ -6,10 +6,14 @@ This project is a micro-frontend based application, it's important to make sure 
 
 ### Getting Started
 
-Before you begin, make sure your system meets the following requirements:
+Before you begin, certificates your system meets the following requirements:
 
 - [`Node.js 20`](https://nodejs.org/pt) or later.
 - macOS, Windows (including WSL), or Linux.
+
+You can manually run each app zone individually or use Docker to build full project, to do it:
+
+- Open `/k8s` directory in terminal and run `docker compose up -d` command.
 
 ### Project Architecture Overview
 
@@ -19,6 +23,10 @@ This section outlines the folder structure of the project located at the `app-wi
 app-with-zones/
 ├── full-site/
 │   └── */
-└── investments/
-    └── */
+├── investments/
+│   └── */
+├── api/
+│   └── */
+k8s/
+└── */
 ````

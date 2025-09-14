@@ -18,7 +18,7 @@ export interface IMenu {
   loginCta: ICta
   subscribeCta: ICta
   profileMenu: ICommonLink[]
-  username: string
+  username?: string
 }
 
 const Header = () => {

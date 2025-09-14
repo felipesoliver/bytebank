@@ -1,14 +1,27 @@
 version: '3.9'
 
 services:
+  mongo:
+    image: mongo:4.4
+    container_name: bytebank-mongo
+    ports:
+      - '27017:27017'
+    networks:
+      - bytebank-network
+
   bytebank:
     build: ../app-with-zones/full-site
     image: bytebank:latest
     container_name: bytebank
+    environment:
+      NEXT_PUBLIC_INVESTMENTS_BASE_URL: http://localhost:3001
     networks:
       - bytebank-network
     ports:
-      - "3000:3000"
+      - '3000:3000'
+    depends_on:
+      - bytebank-investments
+      - bytebank-api
 
   bytebank-investments:
     build: ../app-with-zones/investments
@@ -17,16 +30,22 @@ services:
     networks:
       - bytebank-network
     ports:
-      - "3001:3000"
+      - '3001:3000'
+    depends_on:
+      - bytebank-api
 
   bytebank-api:
-    build: ../app-with-zones/api
+    build:
+      context: ../app-with-zones/api
+    platform: linux/amd64 # 👈 MOVIDO PARA CÁ!
     image: bytebank-api:latest
     container_name: bytebank-api
     networks:
       - bytebank-network
     ports:
-      - "3002:3000"
+      - '3002:3000'
+    depends_on:
+      - mongo
 
 networks:
   bytebank-network:
