@@ -1,29 +1,55 @@
-import React, { useEffect, useState } from "react";
-import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from "recharts";
+import { Cell, Pie, PieChart, Tooltip } from 'recharts';
+import {colorsInvestments, investmentsChartData} from '../../../full-site/data/global-data';
+interface CustomTooltipProps {
+  active?: boolean;
+  payload?: Array<{
+    payload: PieData;
+  }>;
+}
 
-const mockFetchAccount = async () => {
-  await new Promise((resolve) => setTimeout(resolve, 500));
-  return {
-    result: {
-      transactions: [
-        { id: "1", type: "Debit", value: -200, date: "2024-12-16T18:29:08.734Z" },
-        { id: "2", type: "Credit", value: 200, date: "2024-12-17T18:29:08.734Z" },
-        { id: "3", type: "Debit", value: -50, date: "2024-12-18T18:29:08.734Z" },
-        { id: "4", type: "Credit", value: 100, date: "2024-12-19T18:29:08.734Z" },
-      ],
-    },
-  };
+const CustomTooltip = ({ active, payload }: CustomTooltipProps) => {
+  if (active && payload && payload.length) {
+    const data = payload[0].payload || payload[0];
+    if (data && (data.name || data.value)) {
+      return (
+        <div
+          style={{
+            background: '#fff',
+            border: '1px solid #ccc',
+            padding: 8,
+            borderRadius: 4,
+            color: '#222',
+            minWidth: 120,
+          }}
+        >
+          <div style={{ fontSize: 12, marginBottom: 4 }}>
+            <strong>Valor:</strong> R$ {data.value ?? 'N/A'}
+          </div>
+          <div style={{ fontSize: 12 }}>
+            <strong>Porcentagem:</strong> {data.percent ?? 'N/A'}%
+          </div>
+        </div>
+      );
+    } else {
+      return (
+        <div
+          style={{
+            background: '#fff',
+            border: '1px solid #ccc',
+            padding: 8,
+            borderRadius: 4,
+            color: '#222',
+            minWidth: 120,
+          }}
+        >
+          <div>Nenhum dado disponível</div>
+        </div>
+      );
+    }
+  }
+  return null;
 };
 
-const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
-
-
-type Transaction = {
-  id: string;
-  type: string;
-  value: number;
-  date: string;
-};
 
 type PieData = {
   name: string;
@@ -31,38 +57,18 @@ type PieData = {
   percent?: number;
 };
 
-const typeMap: Record<string, string> = {
-  Debit: 'Débito',
-  Credit: 'Crédito',
-};
-
-const formatPieData = (transactions: Transaction[]): PieData[] => {
-  const grouped = transactions.reduce<Record<string, number>>((acc, tx) => {
-    acc[tx.type] = (acc[tx.type] || 0) + Math.abs(tx.value);
-    return acc;
-  }, {});
-  const total = Object.values(grouped).reduce((sum, v) => sum + v, 0);
-  return Object.entries(grouped).map(([type, value]) => ({
-    name: typeMap[type] || type,
-    value,
-    percent: total ? Math.round((value / total) * 100) : 0
+const formatPieData = (investments: PieData[]): PieData[] => {
+  const total = investments.reduce((sum, item) => sum + item.value, 0);
+  return investments.map((item) => ({
+    ...item,
+    percent: total ? Math.round((item.value / total) * 100) : 0,
   }));
 };
 
 const PieChartWithPaddingAngle = () => {
-  const [data, setData] = useState<PieData[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    mockFetchAccount().then((res) => {
-      const formatted = formatPieData(res.result.transactions);
-      console.log('PieChart data:', formatted);
-      setData(formatted);
-      setLoading(false);
-    });
-  }, []);
-
-  if (loading) return <div>Carregando gráfico...</div>;
+  const formatted = formatPieData(investmentsChartData);
+  const data = formatted;
+  if (!data.length) return <div>Carregando gráfico...</div>;
 
   return (
     <div style={{ display: 'flex', alignItems: 'center' }}>
@@ -78,16 +84,35 @@ const PieChartWithPaddingAngle = () => {
           dataKey="value"
           nameKey="name"
         >
-          {data.map((entry, index) => (
-            <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+          {data.map((_, index) => (
+            <Cell key={`cell-${index}`} fill={colorsInvestments[index % colorsInvestments.length]} />
           ))}
         </Pie>
+        <Tooltip content={<CustomTooltip />} />
       </PieChart>
       <ul style={{ listStyle: 'none', marginLeft: '32px', padding: 0 }}>
         {data.map((entry, index) => (
-          <li key={entry.name} style={{ display: 'flex', alignItems: 'center', marginBottom: '12px', color: '#fff', fontSize: '16px' }}>
-            <span style={{ display: 'inline-block', width: 12, height: 12, borderRadius: '50%', background: COLORS[index % COLORS.length], marginRight: 12 }}></span>
-            {entry.name} — R$ {entry.value} ({entry.percent}%)
+          <li
+            key={entry.name}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              marginBottom: '12px',
+              color: '#fff',
+              fontSize: '16px',
+            }}
+          >
+            <span
+              style={{
+                display: 'inline-block',
+                width: 12,
+                height: 12,
+                borderRadius: '50%',
+                background: colorsInvestments[index % colorsInvestments.length],
+                marginRight: 12,
+              }}
+            ></span>
+            {entry.name}
           </li>
         ))}
       </ul>

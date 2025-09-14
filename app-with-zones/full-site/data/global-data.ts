@@ -265,6 +265,17 @@ export const investmentsData = {
   ],
 }
 
+// Dados para o gráfico de investimentos
+export const investmentsChartData = [
+  { name: 'Fundos de Investimento', value: 350 },
+  { name: 'Tesouro Direto', value: 250 },
+  { name: 'Previdência Privada', value: 150 },
+  { name: 'Bolsa de Valores', value: 200 },
+];
+
+
+export const colorsInvestments = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
+
 // SERVICES
 
 export const servicesData = {
