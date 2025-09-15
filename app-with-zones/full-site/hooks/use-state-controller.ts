@@ -1,8 +1,8 @@
-'use client'
+'use client';
 
-import { useContext, useMemo } from 'react'
+import { useContext, useMemo } from 'react';
 
-import { StateControllerContext } from '@/contexts/state-controller'
+import { StateControllerContext } from '@/contexts/state-controller';
 
 function useStateController() {
   const {
@@ -13,12 +13,12 @@ function useStateController() {
     currentAuthModal,
     setCurrentAuthModal,
     refreshExtract,
-    triggerRefresh
-  } = useContext(StateControllerContext)
+    triggerRefresh,
+  } = useContext(StateControllerContext);
 
-  const authModalStatus = useMemo(() => isAuthModalOpen, [isAuthModalOpen])
-  const authStatus = useMemo(() => isLoggedIn, [isLoggedIn])
-  const selectedModal = useMemo(() => currentAuthModal, [currentAuthModal])
+  const authModalStatus = useMemo(() => isAuthModalOpen, [isAuthModalOpen]);
+  const authStatus = useMemo(() => isLoggedIn, [isLoggedIn]);
+  const selectedModal = useMemo(() => currentAuthModal, [currentAuthModal]);
 
   return {
     authModalStatus,
@@ -28,8 +28,8 @@ function useStateController() {
     selectedModal,
     setCurrentAuthModal,
     refreshExtract,
-    triggerRefresh
-  }
+    triggerRefresh,
+  };
 }
 
-export default useStateController
+export default useStateController;

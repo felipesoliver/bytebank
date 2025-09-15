@@ -1,20 +1,31 @@
-import { useState } from "react"
-import { AuthLayout } from "./auth-layout"
-import IlustracaoLogin from "@/assets/images/ilustracaoLogin.svg"
-import Button from "../button"
-import Input from "../input"
+import { useState } from 'react';
+import { AuthLayout } from './auth-layout';
+import IlustracaoLogin from '@/assets/images/ilustracaoLogin.svg';
+import Button from '../button';
+import Input from '../input';
+import { authService } from '@/services/authService';
+import useStateController from '@/hooks/use-state-controller';
 
-interface LoginFormProps {
-  onSubmit: (data: { email: string; password: string }) => void
-}
+export function LoginForm() {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
-export function LoginForm({ onSubmit }: LoginFormProps) {
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
+  const { setIsLoggedIn, setIsAuthModalOpen } = useStateController();
 
-  const handleSubmit = () => {
-    if (email && password) {
-      onSubmit({ email, password })
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+
+    try {
+      const response = await authService.login(email, password);
+
+      console.log(response);
+      if (response.result.token) {
+        setIsAuthModalOpen(false);
+        setIsLoggedIn(true);
+      }
+      // window.location.href = '/';
+    } catch (err: unknown) {
+      console.log('Email ou senha inválidos', err);
     }
   }
 
@@ -26,7 +37,7 @@ export function LoginForm({ onSubmit }: LoginFormProps) {
       illustrationHeight={267}
       title="Login"
     >
-      <div className="flex flex-col gap-4">
+      <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
         <Input
           label="Email"
           type="email"
@@ -54,11 +65,11 @@ export function LoginForm({ onSubmit }: LoginFormProps) {
         </div>
         <Button
           label="Acessar"
-          onClick={handleSubmit}
           centered
           aria-label="Fazer login na conta"
+          type="submit"
         />
-      </div>
+      </form>
     </AuthLayout>
-  )
+  );
 }

@@ -1,16 +1,16 @@
-'use client'
+'use client';
 
-import React, { createContext, useState } from 'react'
+import React, { createContext, useState } from 'react';
 
 export interface IStateControllerContext {
-  isAuthModalOpen: boolean
-  setIsAuthModalOpen: (value: boolean) => void
-  isLoggedIn: boolean
-  setIsLoggedIn: (value: boolean) => void
-  currentAuthModal: 'login' | 'subscribe'
-  setCurrentAuthModal: (value: 'login' | 'subscribe') => void
-  refreshExtract: number
-  triggerRefresh: () => void
+  isAuthModalOpen: boolean;
+  setIsAuthModalOpen: (value: boolean) => void;
+  isLoggedIn: boolean;
+  setIsLoggedIn: (value: boolean) => void;
+  currentAuthModal: 'login' | 'subscribe';
+  setCurrentAuthModal: (value: 'login' | 'subscribe') => void;
+  refreshExtract: number;
+  triggerRefresh: () => void;
 }
 
 const initialState: IStateControllerContext = {
@@ -22,20 +22,28 @@ const initialState: IStateControllerContext = {
   setCurrentAuthModal: () => {},
   refreshExtract: 0,
   triggerRefresh: () => {},
-}
+};
 
 export const StateControllerContext =
-  createContext<IStateControllerContext>(initialState)
+  createContext<IStateControllerContext>(initialState);
 
 const StateControllerProvider = ({ children }: React.PropsWithChildren) => {
-  const [isAuthModalOpen, setIsAuthModalOpen] = useState<boolean>(initialState.isLoggedIn)
-  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(initialState.isAuthModalOpen)
-  const [currentAuthModal, setCurrentAuthModal] = useState<'login' | 'subscribe'>(initialState.currentAuthModal)
-  const [refreshExtract, setRefreshExtract] = useState<number>(initialState.refreshExtract)
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState<boolean>(
+    initialState.isAuthModalOpen
+  );
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(
+    initialState.isLoggedIn
+  );
+  const [currentAuthModal, setCurrentAuthModal] = useState<
+    'login' | 'subscribe'
+  >(initialState.currentAuthModal);
+  const [refreshExtract, setRefreshExtract] = useState<number>(
+    initialState.refreshExtract
+  );
 
   const triggerRefresh = () => {
-    setRefreshExtract(prev => prev + 1)
-  }
+    setRefreshExtract((prev) => prev + 1);
+  };
 
   return (
     <StateControllerContext.Provider
@@ -52,7 +60,7 @@ const StateControllerProvider = ({ children }: React.PropsWithChildren) => {
     >
       {children}
     </StateControllerContext.Provider>
-  )
-}
+  );
+};
 
-export default StateControllerProvider
+export default StateControllerProvider;
