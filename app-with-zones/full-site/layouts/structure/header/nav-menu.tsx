@@ -33,6 +33,13 @@ const NavMenu: React.FC<Properties> = ({
   const { authStatus, setCurrentAuthModal, setIsAuthModalOpen, setIsLoggedIn } =
     useStateController();
 
+  const handleLogout = () => {
+    closeProfileMenu();
+    setIsLoggedIn(false);
+    window.localStorage.removeItem('token');
+    router.push('/');
+  };
+
   return (
     <>
       {authStatus ? (
@@ -114,11 +121,7 @@ const NavMenu: React.FC<Properties> = ({
               <li className="py-4">
                 <button
                   className="block w-full text-lg text-center text-white"
-                  onClick={() => {
-                    closeProfileMenu();
-                    setIsLoggedIn(false);
-                    router.push('/');
-                  }}
+                  onClick={handleLogout}
                   aria-label="Sair da conta"
                 >
                   {profileMenu[2].text}

@@ -7,9 +7,21 @@ import BankStatement from '@/layouts/blocks/bank-statement';
 import useStateController from '@/hooks/use-state-controller';
 import TransactionCard from '@/layouts/blocks/transactions';
 import LoggedOutLayout from '@/layouts/blocks/logged-out-layout';
+import { useEffect } from 'react';
 
 export default function Homepagelayout() {
-  const { refreshExtract, authStatus } = useStateController();
+  const { refreshExtract, authStatus, setIsLoggedIn } = useStateController();
+
+  useEffect(() => {
+    const token = window.localStorage.getItem('token');
+
+    if (token && token.trim() !== '') {
+      setIsLoggedIn(true);
+      console.log('token', token);
+    } else {
+      setIsLoggedIn(false);
+    }
+  }, [setIsLoggedIn]);
 
   return authStatus ? (
     <div className="container grid grid-cols-1 lg:grid-cols-12 gap-5 py-5">
@@ -27,4 +39,4 @@ export default function Homepagelayout() {
       </div>
     </div>
   );
-} 
+}
