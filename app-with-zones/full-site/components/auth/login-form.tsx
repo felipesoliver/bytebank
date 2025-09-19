@@ -18,12 +18,10 @@ export function LoginForm() {
     try {
       const response = await authService.login(email, password);
 
-      console.log(response);
       if (response.result.token) {
         setIsAuthModalOpen(false);
         setIsLoggedIn(true);
       }
-      // window.location.href = '/';
     } catch (err: unknown) {
       console.log('Email ou senha inválidos', err);
     }
