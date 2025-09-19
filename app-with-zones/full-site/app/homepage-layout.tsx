@@ -33,7 +33,7 @@ export default function Homepagelayout() {
       <BankStatement key={refreshExtract} />
     </div>
   ) : (
-    <div className="w-screen min-h-screen py-10 bg-gradient-to-b from-green-dark to-white">
+    <div className="w-screen min-h-screen py-10 bg-gradient-to-b from-green-dark to-white max-w-full">
       <div className="container">
         <LoggedOutLayout />
       </div>
