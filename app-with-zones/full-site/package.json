@@ -13,6 +13,7 @@
   "dependencies": {
     "@reduxjs/toolkit": "^2.9.0",
     "axios": "^1.12.2",
+    "js-cookie": "^3.0.5",
     "next": "15.5.2",
     "next-plugin-svgr": "^1.1.10",
     "react": "19.1.0",

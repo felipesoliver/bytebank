@@ -1,14 +1,16 @@
 'use client';
 
 import AsideNav from '@/layouts/blocks/aside-nav';
-import useStateController from '@/hooks/use-state-controller';
 import Crud from '@/layouts/blocks/crud';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { withAuth } from '@/components/auth/withAuth';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/store';
 
 function TransfersLayout() {
-  const { refreshExtract } = useStateController();
+  const refreshExtract = useSelector(
+    (state: RootState) => state.extract.refreshExtract
+  );
 
   const router = useRouter();
   const [authorized, setAuthorized] = useState(false);
@@ -37,4 +39,4 @@ function TransfersLayout() {
   );
 }
 
-export default withAuth(TransfersLayout);
+export default TransfersLayout;

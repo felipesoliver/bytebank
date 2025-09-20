@@ -1,23 +1,32 @@
 'use client';
 
-import useStateController from '@/hooks/use-state-controller';
 import { LoginForm, RegisterForm } from '../auth';
 import React from 'react';
 
 import Close from '@/assets/icons/close.svg';
+
+import {
+  setIsAuthModalOpen,
+  setCurrentAuthModal,
+} from '@/features/modal/modalSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch, RootState } from '@/store';
 
 interface ModalProps {
   children?: React.ReactNode;
 }
 
 const Modal = ({ children }: ModalProps) => {
-  const {
-    selectedModal,
-    setCurrentAuthModal,
-    authModalStatus,
-    setIsAuthModalOpen,
-    setIsLoggedIn,
-  } = useStateController();
+  const authModalStatus = useSelector(
+    (state: RootState) => state.modal.isAuthModalOpen
+  );
+
+  const dispatch = useDispatch<AppDispatch>();
+  const isOpen = useSelector((state: RootState) => state.modal.isAuthModalOpen);
+
+  const currentModal = useSelector(
+    (state: RootState) => state.modal.currentAuthModal
+  );
 
   if (!authModalStatus) return null;
 
@@ -26,7 +35,7 @@ const Modal = ({ children }: ModalProps) => {
       <div className="relative bg-gray-light lg:rounded-2xl w-full lg:w-[49.5rem] h-fit shadow-2xl animate-showup lg:my-20">
         <button
           aria-label="Fechar modal"
-          onClick={() => setIsAuthModalOpen(false)}
+          onClick={() => dispatch(setIsAuthModalOpen(!isOpen))}
           className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 text-xl z-10 w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-100 transition-colors"
         >
           <Close className="w-4 h-4" />
@@ -36,24 +45,24 @@ const Modal = ({ children }: ModalProps) => {
             children
           ) : (
             <>
-              {selectedModal === 'login' ? (
+              {currentModal === 'login' ? (
                 <>
                   <LoginForm />
                   <button
                     className="text-sm text-green underline"
-                    onClick={() => {
-                      setCurrentAuthModal('subscribe');
-                    }}
+                    onClick={() => dispatch(setCurrentAuthModal('subscribe'))}
                   >
                     Não tem conta? Cadastre-se
                   </button>
                 </>
               ) : (
                 <>
-                  <RegisterForm onSubmit={() => setCurrentAuthModal('login')} />
+                  <RegisterForm
+                    onSubmit={() => dispatch(setCurrentAuthModal('login'))}
+                  />
                   <button
                     className="text-sm text-green underline"
-                    onClick={() => setCurrentAuthModal('login')}
+                    onClick={() => dispatch(setCurrentAuthModal('login'))}
                   >
                     Já tem conta? Faça login
                   </button>

@@ -3,23 +3,27 @@ import { AuthLayout } from './auth-layout';
 import IlustracaoLogin from '@/assets/images/ilustracaoLogin.svg';
 import Button from '../button';
 import Input from '../input';
-import { authService } from '@/services/authService';
 import useStateController from '@/hooks/use-state-controller';
+import { login } from '@/app/api/auth';
+import { setIsAuthModalOpen } from '@/features/modal/modalSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch, RootState } from '@/store';
 
 export function LoginForm() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const { setIsLoggedIn, setIsAuthModalOpen } = useStateController();
+  const { setIsLoggedIn } = useStateController();
+  const dispatch = useDispatch<AppDispatch>();
+  const isOpen = useSelector((state: RootState) => state.modal.isAuthModalOpen);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-
     try {
-      const response = await authService.login(email, password);
+      const response = await login({ email, password });
 
       if (response.result.token) {
-        setIsAuthModalOpen(false);
+        dispatch(setIsAuthModalOpen(!isOpen));
         setIsLoggedIn(true);
       }
     } catch (err: unknown) {

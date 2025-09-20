@@ -3,7 +3,6 @@ import { servicesData } from '@/data/global-data';
 import ServiceCard from './service-card';
 
 import Graphism from '@/assets/images/graphism-dark.svg';
-import { withAuth } from '@/components/auth/withAuth';
 
 export interface IServiceCard {
   subtitle: string;
@@ -38,4 +37,4 @@ const Services = () => {
   );
 };
 
-export default withAuth(Services);
+export default Services;
