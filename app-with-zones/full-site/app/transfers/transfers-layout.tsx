@@ -12,23 +12,6 @@ function TransfersLayout() {
     (state: RootState) => state.extract.refreshExtract
   );
 
-  const router = useRouter();
-  const [authorized, setAuthorized] = useState(false);
-
-  useEffect(() => {
-    const token = localStorage.getItem('token');
-
-    if (!token) {
-      router.replace('/');
-    } else {
-      setAuthorized(true);
-    }
-  }, [router]);
-
-  if (!authorized) {
-    return null;
-  }
-
   return (
     <div className="container grid grid-cols-1 lg:grid-cols-12 gap-5 py-5">
       <AsideNav />

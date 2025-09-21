@@ -1,30 +1,35 @@
+'use client';
+
 import { useState } from 'react';
 import { AuthLayout } from './auth-layout';
 import IlustracaoLogin from '@/assets/images/ilustracaoLogin.svg';
 import Button from '../button';
 import Input from '../input';
-import useStateController from '@/hooks/use-state-controller';
 import { login } from '@/app/api/auth';
 import { setIsAuthModalOpen } from '@/features/modal/modalSlice';
-import { useDispatch, useSelector } from 'react-redux';
-import { AppDispatch, RootState } from '@/store';
+import { useDispatch } from 'react-redux';
+import { AppDispatch } from '@/store';
+import { setIsLoggedIn } from '@/features/auth/authSlice';
+import { useRouter } from 'next/navigation';
 
 export function LoginForm() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const { setIsLoggedIn } = useStateController();
   const dispatch = useDispatch<AppDispatch>();
-  const isOpen = useSelector((state: RootState) => state.modal.isAuthModalOpen);
+  const router = useRouter();
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
+
     try {
       const response = await login({ email, password });
 
       if (response.result.token) {
-        dispatch(setIsAuthModalOpen(!isOpen));
-        setIsLoggedIn(true);
+        dispatch(setIsAuthModalOpen(false));
+        dispatch(setIsLoggedIn(true));
+
+        router.push('/dashboard');
       }
     } catch (err: unknown) {
       console.log('Email ou senha inválidos', err);

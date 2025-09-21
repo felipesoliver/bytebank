@@ -1,16 +1,15 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { IMenu } from './header';
 import Cta from '@/components/cta';
 import { twMerge } from 'tailwind-merge';
-
 import Avatar from '@/assets/icons/avatar.svg';
 import Close from '@/assets/icons/close.svg';
 import { accountData, headerData } from '@/data/global-data';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { RootState, AppDispatch } from '@/store';
 import {
   setIsAuthModalOpen,
@@ -24,7 +23,6 @@ interface Properties {
   isMenuActive: boolean;
   isProfileMenuActive: boolean;
   openProfileMenu: () => void;
-  openRegister?: () => void;
 }
 
 const NavMenu: React.FC<Properties> = ({
@@ -41,7 +39,24 @@ const NavMenu: React.FC<Properties> = ({
   const { loggedOutMenu, loggedInMenu, profileMenu, loginCta, subscribeCta } =
     headerData as IMenu;
 
-  const authStatus = useSelector((state: RootState) => state.auth?.isLoggedIn);
+  const authStatus = useSelector((state: RootState) => state.auth.isLoggedIn);
+  const [authChecked, setAuthChecked] = useState(false);
+
+  useEffect(() => {
+    async function checkAuthStatus() {
+      try {
+        const res = await fetch('/api/auth/status');
+        const data = await res.json();
+        dispatch(setIsLoggedIn(data.isLoggedIn));
+      } catch (err) {
+        console.error('Erro ao verificar status de login', err);
+      } finally {
+        setAuthChecked(true);
+      }
+    }
+
+    checkAuthStatus();
+  }, [dispatch]);
 
   const handleLogout = async () => {
     closeProfileMenu();
@@ -50,18 +65,16 @@ const NavMenu: React.FC<Properties> = ({
     router.push('/');
   };
 
+  if (!authChecked) return null;
+
   return (
     <>
       {authStatus ? (
         <>
-          {/* Menu usuário logado */}
+          {/* Menu logado */}
           <div className="w-full flex items-center justify-end gap-4">
             <span className="hidden md:block">{`${firstName} ${lastName}`}</span>
-            <button
-              onClick={openProfileMenu}
-              aria-label="Abrir menu do perfil do usuário"
-            >
-              <span className="sr-only">Abrir menu de perfil</span>
+            <button onClick={openProfileMenu} aria-label="Abrir menu do perfil">
               <Avatar className="w-10 h-10" />
             </button>
           </div>
@@ -78,18 +91,12 @@ const NavMenu: React.FC<Properties> = ({
               onClick={closeMenu}
               aria-label="Fechar menu"
             >
-              <span className="sr-only">Fechar menu</span>
               <Close className="w-4 h-4" />
             </button>
             <ul className="flex flex-col">
               {loggedInMenu.map((item, idx) => (
-                <li key={idx} className="py-4 not-last:border-b border-black">
-                  <a
-                    href={item.url}
-                    onClick={closeMenu}
-                    className="block w-full text-lg text-center text-black"
-                    aria-label={`Navegar para ${item.text}`}
-                  >
+                <li className="py-4 not-last:border-b border-black" key={idx}>
+                  <a href={item.url} onClick={closeMenu}>
                     {item.text}
                   </a>
                 </li>
@@ -111,30 +118,18 @@ const NavMenu: React.FC<Properties> = ({
               onClick={closeProfileMenu}
               aria-label="Fechar menu de perfil"
             >
-              <span className="sr-only">Fechar menu de perfil</span>
               <Close className="w-4 h-4" />
             </button>
             <ul className="flex flex-col">
               {profileMenu.slice(0, 2).map((item, idx) => (
-                <li key={idx} className="py-4 border-b border-white">
-                  <a
-                    href={item.url}
-                    onClick={closeProfileMenu}
-                    className="block w-full text-lg text-center text-white"
-                    aria-label={`Navegar para ${item.text}`}
-                  >
+                <li className="py-4 border-b border-white" key={idx}>
+                  <a href={item.url} onClick={closeProfileMenu}>
                     {item.text}
                   </a>
                 </li>
               ))}
               <li className="py-4">
-                <button
-                  className="block w-full text-lg text-center text-white"
-                  onClick={handleLogout}
-                  aria-label="Sair da conta"
-                >
-                  {profileMenu[2].text}
-                </button>
+                <button onClick={handleLogout}>{profileMenu[2].text}</button>
               </li>
             </ul>
           </nav>
@@ -155,10 +150,8 @@ const NavMenu: React.FC<Properties> = ({
               onClick={closeMenu}
               aria-label="Fechar menu"
             >
-              <span className="sr-only">Fechar menu</span>
               <Close className="w-4 h-4" />
             </button>
-
             <ul className="flex flex-col md:flex-row md:items-center md:gap-10">
               {loggedOutMenu.map((item, idx) => (
                 <li
@@ -169,14 +162,12 @@ const NavMenu: React.FC<Properties> = ({
                     href={item.url}
                     onClick={closeMenu}
                     className="block text-lg w-full md:w-fit text-center md:font-semibold translate-0 hover:-translate-y-2 duration-200 transition-all"
-                    aria-label={`Navegar para ${item.text}`}
                   >
                     {item.text}
                   </Link>
                 </li>
               ))}
             </ul>
-
             <div className="hidden md:flex items-center md:gap-6">
               <Cta
                 {...subscribeCta}
