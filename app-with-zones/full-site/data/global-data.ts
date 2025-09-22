@@ -8,13 +8,14 @@ export const accountData = {
   emailLabel: 'Email',
   email: 'joanadasilvaoliveira@email.com.br',
   passLabel: 'Senha',
-  imageAlt: 'Interface de transações financeiras com elementos gráficos em blocos nos cantos inferior esquerdo e superior direito',
+  imageAlt:
+    'Interface de transações financeiras com elementos gráficos em blocos nos cantos inferior esquerdo e superior direito',
   balance: 2500,
   cta: {
     text: 'Salvar alterações',
     variant: 'orange',
   },
-}
+};
 
 // HEADER
 
@@ -34,7 +35,7 @@ export const headerData = {
   loggedInMenu: [
     {
       text: 'Inicio',
-      url: '/',
+      url: '/dashboard',
       blank: false,
       mf: false,
     },
@@ -82,7 +83,7 @@ export const headerData = {
       blank: false,
     },
   ],
-}
+};
 
 // FOOTER
 
@@ -141,7 +142,7 @@ export const footerData = {
       blank: true,
     },
   ],
-}
+};
 
 // BANK STATEMENT
 
@@ -174,7 +175,7 @@ export const bankStatementData = {
       type: 'deposit',
     },
   ],
-}
+};
 
 // 404
 
@@ -187,7 +188,7 @@ export const notFoundData = {
     url: '/',
     blank: false,
   },
-}
+};
 
 // HOME LOGGED-OUT
 
@@ -221,14 +222,14 @@ export const loggedOutData = {
         'Seus dispositivos móveis (computador e laptop) protegidos por uma mensalidade simbólica.',
     },
   ],
-}
+};
 
 // DAHBOARD HERO
 
 export const dashboardHeroData = {
   amountLabel: 'Saldo',
   accountLabel: 'Conta corrente',
-}
+};
 
 // TRANSACTIONS
 
@@ -245,11 +246,11 @@ export const transactionsData = {
     {
       label: 'DOC/TED',
       value: 'transfer',
-    }
+    },
   ],
   imageAlt:
     'Imagem de mulher com cartão de crédito. A mulher está segurando o cartão com a mão esquerda e está olhando para o lado direito. A imagem está em um fundo cinza.',
-}
+};
 
 // INVESTMENTS
 
@@ -267,7 +268,7 @@ export const investmentsData = {
       price: 14000,
     },
   ],
-}
+};
 
 // SERVICES
 
@@ -299,4 +300,4 @@ export const servicesData = {
       type: 'cellphone',
     },
   ],
-}
+};
