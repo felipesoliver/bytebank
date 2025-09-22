@@ -26,14 +26,13 @@ import {
 } from '@/features/transactions/transactionSlice';
 
 const Crud = () => {
-  const { subtitle, transactions } = bankStatementData as IBankStatement;
+  const { subtitle } = bankStatementData as IBankStatement;
   const {
     transactionType,
     placeholderSelect,
     placeholderDate,
     placeholderInput,
   } = transactionsData as ITransaction;
-  const { getValue, setValue } = useLocalStorage('statement', transactions);
 
   const [date, setDate] = useState<string>('');
   const [amount, setAmount] = useState<string>('');

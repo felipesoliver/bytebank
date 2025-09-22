@@ -3,7 +3,6 @@ import { useState } from 'react';
 import useLocalStorage from '@/hooks/use-local-storage';
 
 import { TransactionFormProps } from './types';
-import useStateController from '@/hooks/use-state-controller';
 import { getCurrentMonth, getCurrentDateShort } from '@/utils/date';
 import CustomSelect from '@/components/select';
 import Input from '@/components/input';
@@ -15,6 +14,7 @@ import { bankStatementData } from '@/data/global-data';
 import { toast } from 'react-toastify';
 import { useDispatch } from 'react-redux';
 import { addTransaction } from '@/features/transactions/transactionSlice';
+import { triggerRefresh } from '@/features/extract/extractSlice';
 
 const TransactionForm = ({
   transactionType,
@@ -25,7 +25,6 @@ const TransactionForm = ({
     'statement',
     []
   );
-  const { triggerRefresh } = useStateController();
 
   const { transactions } = bankStatementData as IBankStatement;
   const { getValue: storedBalance } = useLocalStorage(
@@ -73,7 +72,7 @@ const TransactionForm = ({
 
     setValue([...storedValue, newTransaction]);
     toast.success('Transação realizada com sucesso!');
-    triggerRefresh();
+    dispatch(triggerRefresh());
     setSelectedTransaction('');
     setAmount('');
   };

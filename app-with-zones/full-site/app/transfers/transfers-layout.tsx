@@ -1,11 +1,16 @@
-'use client'
+'use client';
 
-import AsideNav from "@/layouts/blocks/aside-nav"
-import useStateController from "@/hooks/use-state-controller"
-import Crud from "@/layouts/blocks/crud"
+import AsideNav from '@/layouts/blocks/aside-nav';
+import Crud from '@/layouts/blocks/crud';
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/store';
 
-export default function TransfersLayout() {
-  const {refreshExtract} = useStateController()
+function TransfersLayout() {
+  const refreshExtract = useSelector(
+    (state: RootState) => state.extract.refreshExtract
+  );
 
   return (
     <div className="container grid grid-cols-1 lg:grid-cols-12 gap-5 py-5">
@@ -14,5 +19,7 @@ export default function TransfersLayout() {
         <Crud key={refreshExtract} />
       </div>
     </div>
-  )
+  );
 }
+
+export default TransfersLayout;

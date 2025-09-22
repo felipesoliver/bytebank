@@ -1,20 +1,38 @@
-import { useState } from "react"
-import { AuthLayout } from "./auth-layout"
-import IlustracaoLogin from "@/assets/images/ilustracaoLogin.svg"
-import Button from "../button"
-import Input from "../input"
+'use client';
 
-interface LoginFormProps {
-  onSubmit: (data: { email: string; password: string }) => void
-}
+import { useState } from 'react';
+import { AuthLayout } from './auth-layout';
+import IlustracaoLogin from '@/assets/images/ilustracaoLogin.svg';
+import Button from '../button';
+import Input from '../input';
+import { login } from '@/app/api/auth';
+import { setIsAuthModalOpen } from '@/features/modal/modalSlice';
+import { useDispatch } from 'react-redux';
+import { AppDispatch } from '@/store';
+import { setIsLoggedIn } from '@/features/auth/authSlice';
+import { useRouter } from 'next/navigation';
 
-export function LoginForm({ onSubmit }: LoginFormProps) {
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
+export function LoginForm() {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
-  const handleSubmit = () => {
-    if (email && password) {
-      onSubmit({ email, password })
+  const dispatch = useDispatch<AppDispatch>();
+  const router = useRouter();
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+
+    try {
+      const response = await login({ email, password });
+
+      if (response.result.token) {
+        dispatch(setIsAuthModalOpen(false));
+        dispatch(setIsLoggedIn(true));
+
+        router.push('/dashboard');
+      }
+    } catch (err: unknown) {
+      console.log('Email ou senha inválidos', err);
     }
   }
 
@@ -26,7 +44,7 @@ export function LoginForm({ onSubmit }: LoginFormProps) {
       illustrationHeight={267}
       title="Login"
     >
-      <div className="flex flex-col gap-4">
+      <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
         <Input
           label="Email"
           type="email"
@@ -54,11 +72,11 @@ export function LoginForm({ onSubmit }: LoginFormProps) {
         </div>
         <Button
           label="Acessar"
-          onClick={handleSubmit}
           centered
           aria-label="Fazer login na conta"
+          type="submit"
         />
-      </div>
+      </form>
     </AuthLayout>
-  )
+  );
 }

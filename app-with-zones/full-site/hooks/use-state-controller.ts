@@ -1,35 +1,31 @@
-'use client'
+import { useSelector, useDispatch } from 'react-redux';
+import { RootState, AppDispatch } from '@/store';
+import {
+  setIsAuthModalOpen,
+  setCurrentAuthModal,
+} from '@/features/modal/modalSlice';
+import { setIsLoggedIn } from '@/features/auth/authSlice';
 
-import { useContext, useMemo } from 'react'
+function useStateControllerRedux() {
+  const dispatch = useDispatch<AppDispatch>();
 
-import { StateControllerContext } from '@/contexts/state-controller'
-
-function useStateController() {
-  const {
-    isAuthModalOpen,
-    setIsAuthModalOpen,
-    isLoggedIn,
-    setIsLoggedIn,
-    currentAuthModal,
-    setCurrentAuthModal,
-    refreshExtract,
-    triggerRefresh
-  } = useContext(StateControllerContext)
-
-  const authModalStatus = useMemo(() => isAuthModalOpen, [isAuthModalOpen])
-  const authStatus = useMemo(() => isLoggedIn, [isLoggedIn])
-  const selectedModal = useMemo(() => currentAuthModal, [currentAuthModal])
+  const authModalStatus = useSelector(
+    (state: RootState) => state.modal.isAuthModalOpen
+  );
+  const selectedModal = useSelector(
+    (state: RootState) => state.modal.currentAuthModal
+  );
+  const authStatus = useSelector((state: RootState) => state.auth.isLoggedIn);
 
   return {
     authModalStatus,
-    setIsAuthModalOpen,
-    authStatus,
-    setIsLoggedIn,
+    setIsAuthModalOpen: (value: boolean) => dispatch(setIsAuthModalOpen(value)),
     selectedModal,
-    setCurrentAuthModal,
-    refreshExtract,
-    triggerRefresh
-  }
+    setCurrentAuthModal: (value: 'login' | 'subscribe') =>
+      dispatch(setCurrentAuthModal(value)),
+    authStatus,
+    setIsLoggedIn: (value: boolean) => dispatch(setIsLoggedIn(value)),
+  };
 }
 
-export default useStateController
+export default useStateControllerRedux;

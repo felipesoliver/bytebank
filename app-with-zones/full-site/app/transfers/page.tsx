@@ -1,12 +1,10 @@
-import { Metadata } from "next"
-import TransfersLayout from "./transfers-layout"
+import { Metadata } from 'next';
+import TransfersLayout from './transfers-layout';
 
 export const metadata: Metadata = {
-  title: "Bytebank | Transfers",
-}
+  title: 'Bytebank | Transfers',
+};
 
 export default function TransfersPage() {
-  return (
-    <TransfersLayout />
-  )
+  return <TransfersLayout />;
 }

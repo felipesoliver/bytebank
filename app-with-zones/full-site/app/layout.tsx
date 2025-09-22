@@ -6,7 +6,6 @@ import { twMerge } from 'tailwind-merge';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Header from '@/layouts/structure/header';
-import StateControllerProvider from '@/contexts/state-controller';
 import Footer from '@/layouts/structure/footer';
 import Modal from '@/components/modal';
 import ReduxProvider from './redux-provider';
@@ -25,13 +24,11 @@ export default function RootLayout({
     <html lang="en">
       <body className={twMerge('font-inter', inter.className)}>
         <ReduxProvider>
-          <StateControllerProvider>
-            <Header />
-            <main className="min-h-screen">{children}</main>
-            <Footer />
-            <Modal />
-            <ToastContainer position="top-right" autoClose={3000} />
-          </StateControllerProvider>
+          <Header />
+          <main className="min-h-screen">{children}</main>
+          <Footer />
+          <Modal />
+          <ToastContainer position="top-right" autoClose={3000} />
         </ReduxProvider>
       </body>
     </html>
