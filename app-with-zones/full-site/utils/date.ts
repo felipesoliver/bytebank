@@ -25,6 +25,7 @@ export const formatMonth = (date: Date | string) => {
 export const formatDate = (date: Date | string) => {
   const d = new Date(date)
   const formatedDate = new Intl.DateTimeFormat('pt-BR', {
+    timeZone: 'UTC',
     day: '2-digit',
     month: '2-digit',
     year: 'numeric',
