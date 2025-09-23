@@ -1,15 +1,17 @@
-import { colorsInvestments, investmentsChartData } from '@/data/global-data';
-import { Cell, Pie, PieChart, Tooltip } from 'recharts';
+import { colorsInvestments, investmentsChartData } from '@/data/global-data'
+import { Cell, Pie, PieChart, Tooltip } from 'recharts'
 interface CustomTooltipProps {
-  active?: boolean;
+  active?: boolean
   payload?: Array<{
-    payload: PieData;
-  }>;
+    payload: PieData
+  }>
 }
 
 const CustomTooltip = ({ active, payload }: CustomTooltipProps) => {
+  if (typeof window === 'undefined') return null
+
   if (active && payload && payload.length) {
-    const data = payload[0].payload || payload[0];
+    const data = payload[0].payload || payload[0]
     if (data && (data.name || data.value)) {
       return (
         <div
@@ -29,7 +31,7 @@ const CustomTooltip = ({ active, payload }: CustomTooltipProps) => {
             <strong>Porcentagem:</strong> {data.percent ?? 'N/A'}%
           </div>
         </div>
-      );
+      )
     } else {
       return (
         <div
@@ -44,31 +46,31 @@ const CustomTooltip = ({ active, payload }: CustomTooltipProps) => {
         >
           <div>Nenhum dado disponível</div>
         </div>
-      );
+      )
     }
   }
-  return null;
-};
+  return null
+}
 
 
 type PieData = {
-  name: string;
-  value: number;
-  percent?: number;
-};
+  name: string
+  value: number
+  percent?: number
+}
 
 const formatPieData = (investments: PieData[]): PieData[] => {
-  const total = investments.reduce((sum, item) => sum + item.value, 0);
+  const total = investments.reduce((sum, item) => sum + item.value, 0)
   return investments.map((item) => ({
     ...item,
     percent: total ? Math.round((item.value / total) * 100) : 0,
-  }));
-};
+  }))
+}
 
 const PieChartWithPaddingAngle = () => {
-  const formatted = formatPieData(investmentsChartData);
-  const data = formatted;
-  if (!data.length) return <div>Carregando gráfico...</div>;
+  const formatted = formatPieData(investmentsChartData)
+  const data = formatted
+  if (!data.length) return <div>Carregando gráfico...</div>
 
   return (
     <div style={{ display: 'flex', alignItems: 'center' }}>
@@ -117,7 +119,7 @@ const PieChartWithPaddingAngle = () => {
         ))}
       </ul>
     </div>
-  );
-};
+  )
+}
 
-export default PieChartWithPaddingAngle;
+export default PieChartWithPaddingAngle

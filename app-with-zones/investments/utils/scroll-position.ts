@@ -10,9 +10,7 @@
 
 type ScrollCallback = (scrollY: number) => void
 
-export const getScrollPosition: (callback: ScrollCallback) => (() => void) | undefined = (callback) => {
-  if (typeof window === 'undefined') return
-
+export const getScrollPosition: (callback: ScrollCallback) => void = (callback) => {
   const updatePosition = () => {
     const scrollY = typeof window.scrollY === 'undefined' ? window.pageYOffset : window.scrollY
     callback(scrollY)
