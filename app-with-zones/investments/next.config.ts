@@ -6,7 +6,6 @@ const nextConfig: NextConfig = {
   assetPrefix: '/investments-static',
   basePath: '/investments',
   turbopack: {
-    root: __dirname,
     rules: {
       '*.svg': {
         loaders: [
