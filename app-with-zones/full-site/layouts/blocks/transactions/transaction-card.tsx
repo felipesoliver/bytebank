@@ -17,7 +17,6 @@ const TransactionCard = () => {
     placeholderSelect,
   } = transactionsData as ITransaction
 
-
   return (
     <TransactionsCardLayout>
       <h2 className="font-bold text-white text-[25px] mb-6 text-center md:text-left z-2">

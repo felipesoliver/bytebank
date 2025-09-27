@@ -1,12 +1,11 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState } from 'react';
 import { bankStatementData, transactionsData } from '@/data/global-data';
-import useLocalStorage from '@/hooks/use-local-storage';
 import {
   IBankStatement,
   IBankStatementItem,
   ITransaction,
 } from '@/types/types';
+
 
 import EditIcon from '@/assets/icons/edit.svg';
 import DeleteIcon from '@/assets/icons/delete.svg';

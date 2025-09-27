@@ -32,7 +32,7 @@ interface IOption {
 export interface ICustomSelect {
   options: IOption[];
   placeholder?: string;
-  onValueChange?: (value: string) => void;
+  onValueChange?: (value: string ) => void;
   defaultValue?: string;
   className?: string;
   borderColor?: 'blue' | 'green';
@@ -61,8 +61,7 @@ export interface IInput extends React.InputHTMLAttributes<HTMLInputElement> {
 
 export interface IBankStatementItem {
   date: string;
-  month: string;
-  amount: number;
+  value: number;
   type: string;
   id?: number;
 }
