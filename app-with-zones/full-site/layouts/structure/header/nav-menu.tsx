@@ -6,7 +6,7 @@ import Cta from '@/components/cta';
 import { twMerge } from 'tailwind-merge';
 import Avatar from '@/assets/icons/avatar.svg';
 import Close from '@/assets/icons/close.svg';
-import { accountData, headerData } from '@/data/global-data';
+import { headerData } from '@/data/global-data';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useSelector, useDispatch } from 'react-redux';
@@ -35,15 +35,21 @@ const NavMenu: React.FC<Properties> = ({
   const router = useRouter();
   const dispatch = useDispatch<AppDispatch>();
 
-  const { firstName, lastName } = accountData;
   const { loggedOutMenu, loggedInMenu, profileMenu, loginCta, subscribeCta } =
     headerData as IMenu;
 
   const authStatus = useSelector((state: RootState) => state.auth.isLoggedIn);
   const [authChecked, setAuthChecked] = useState(false);
+  const [userName, setUserName] = useState('');
 
   useEffect(() => {
     async function checkAuthStatus() {
+      const user = localStorage.getItem('user');
+
+      if (user) {
+        setUserName(JSON.parse(user));
+      }
+
       try {
         const res = await fetch('/api/auth/status');
         const data = await res.json();
@@ -73,7 +79,7 @@ const NavMenu: React.FC<Properties> = ({
         <>
           {/* Menu logado */}
           <div className="w-full flex items-center justify-end gap-4">
-            <span className="hidden md:block">{`${firstName} ${lastName}`}</span>
+            <span className="hidden md:block">{userName}</span>
             <button onClick={openProfileMenu} aria-label="Abrir menu do perfil">
               <Avatar className="w-10 h-10" />
             </button>
