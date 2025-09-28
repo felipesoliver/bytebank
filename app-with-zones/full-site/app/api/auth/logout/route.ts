@@ -11,7 +11,5 @@ export async function POST() {
     maxAge: 0,
   });
 
-  localStorage.removeItem('user');
-
   return response;
 }
