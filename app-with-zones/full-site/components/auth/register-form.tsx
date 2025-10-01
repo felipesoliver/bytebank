@@ -1,40 +1,56 @@
-'use client'
+'use client';
 
-import { useState } from "react"
-import { AuthLayout } from "./auth-layout"
-import IlustracaoCriacaoLogin from "@/assets/images/IlustraçãoCriacaoLogin.svg"
-import Button from "../button"
-import Input from "../input"
+import { useState } from 'react';
+import { AuthLayout } from './auth-layout';
+import IlustracaoCriacaoLogin from '@/assets/images/IlustraçãoCriacaoLogin.svg';
+import Button from '../button';
+import Input from '../input';
+import { register } from '@/app/api/register';
+import { toast } from 'react-toastify';
+import { useDispatch } from 'react-redux';
+import { AppDispatch } from '@/store';
+import { setIsAuthModalOpen } from '@/features/modal/modalSlice';
 
 interface RegisterFormProps {
-  onSubmit: (data: { name: string; email: string; password: string }) => void
-  formId?: string
+  onSubmit: (data: { name: string; email: string; password: string }) => void;
+  formId?: string;
 }
 
-export function RegisterForm({ onSubmit, formId }: RegisterFormProps) {
-  const uniqueId = formId || `register-form-${Math.random().toString(36).slice(2, 10)}`
-  const [name, setName] = useState("")
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
-  const [agreedToTerms, setAgreedToTerms] = useState(false)
-  const [emailError, setEmailError] = useState("")
+export function RegisterForm({ formId }: RegisterFormProps) {
+  const uniqueId =
+    formId || `register-form-${Math.random().toString(36).slice(2, 10)}`;
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [agreedToTerms, setAgreedToTerms] = useState(false);
+  const [emailError, setEmailError] = useState('');
 
   const validateEmail = (email: string) => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
-      setEmailError("Dado incorreto, Revise e digite novamente.")
-      return false
+      setEmailError('Dado incorreto, Revise e digite novamente.');
+      return false;
     } else {
-      setEmailError("")
-      return true
+      setEmailError('');
+      return true;
     }
-  }
+  };
 
-  const handleSubmit = () => {
-    if (name && email && password && agreedToTerms) {
-      onSubmit({ name, email, password })
-    } else if (!agreedToTerms) {
-      alert("Você deve concordar com os termos para continuar.")
+  const dispatch = useDispatch<AppDispatch>();
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+
+    try {
+      const response = await register({ username: name, email, password });
+      console.log('antes', response?.result?.id);
+      if (response?.result?.id) {
+        toast.success('Cadastro realizado com sucesso!');
+        dispatch(setIsAuthModalOpen(false));
+      }
+    } catch (err: unknown) {
+      toast.error('Erro ao realizar o registro do usuário');
+      console.log('Register error', err);
     }
   }
 
@@ -47,7 +63,7 @@ export function RegisterForm({ onSubmit, formId }: RegisterFormProps) {
       title="Criar conta"
       subtitle="Preencha os campos abaixo para criar sua conta corrente!"
     >
-      <div className="flex flex-col gap-4">
+      <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
         <Input
           label="Nome completo"
           id={`${uniqueId}-name`}
@@ -65,8 +81,8 @@ export function RegisterForm({ onSubmit, formId }: RegisterFormProps) {
           value={email}
           error={emailError}
           onChange={(e) => {
-            setEmail(e.target.value)
-            validateEmail(e.target.value)
+            setEmail(e.target.value);
+            validateEmail(e.target.value);
           }}
         />
         <Input
@@ -99,12 +115,16 @@ export function RegisterForm({ onSubmit, formId }: RegisterFormProps) {
         </div>
         <Button
           label="Criar conta"
-          onClick={handleSubmit}
+          type="submit"
           disabled={!agreedToTerms}
           centered
-          aria-label={agreedToTerms ? "Criar nova conta" : "Aceite os termos para criar conta"}
+          aria-label={
+            agreedToTerms
+              ? 'Criar nova conta'
+              : 'Aceite os termos para criar conta'
+          }
         />
-      </div>
+      </form>
     </AuthLayout>
-  )
+  );
 }
