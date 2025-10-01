@@ -25,11 +25,84 @@ router.get('/account', accountController.find.bind(accountController))
  *     tags: [Transações]
  *     security:
  *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               accountId:
+ *                 type: string
+ *               value:
+ *                 type: number
+ *               type:
+ *                 type: string
+ *                 enum: [Debit, Credit]
+ *               from:
+ *                 type: string
+ *               to:
+ *                 type: string
+ *               anexo:
+ *                 type: string
+ *               urlAnexo:
+ *                 type: string
+ *                 description: URL do anexo armazenado
  *     responses:
  *       201:
  *         description: Transação criada com sucesso
  */
 router.post('/account/transaction', accountController.createTransaction.bind(accountController))
+
+/**
+ * @swagger
+ * /account/transaction/{id}:
+ *   put:
+ *     summary: Atualiza uma transação existente
+ *     tags: [Transações]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *     responses:
+ *       200:
+ *         description: Transação atualizada com sucesso
+ *       404:
+ *         description: Transação não encontrada
+ */
+router.put('/account/transaction/:id', accountController.updateTransaction.bind(accountController))
+
+/**
+ * @swagger
+ * /account/transaction/{id}:
+ *   delete:
+ *     summary: Remove uma transação
+ *     tags: [Transações]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       204:
+ *         description: Transação removida com sucesso
+ *       404:
+ *         description: Transação não encontrada
+ */
+router.delete('/account/transaction/:id', accountController.deleteTransaction.bind(accountController))
 
 /**
  * @swagger
