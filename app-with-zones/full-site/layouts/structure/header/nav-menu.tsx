@@ -67,6 +67,7 @@ const NavMenu: React.FC<Properties> = ({
   const handleLogout = async () => {
     closeProfileMenu();
     await fetch('/api/auth/logout', { method: 'POST' });
+    localStorage.removeItem('user');
     dispatch(setIsLoggedIn(false));
     router.push('/');
   };
