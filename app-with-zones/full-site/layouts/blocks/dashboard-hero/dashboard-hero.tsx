@@ -1,11 +1,11 @@
 'use client';
 
 import Eye from '@/assets/icons/eye.svg';
-import { accountData, dashboardHeroData } from '@/data/global-data';
+import { dashboardHeroData } from '@/data/global-data';
 import { getCurrentDate } from '@/utils/date';
 import ManWithMoney from '@/assets/images/man-w-money-ilustration.svg';
 import Graphism from '@/assets/images/graphism.svg';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { twMerge } from 'tailwind-merge';
 import { selectBalance } from '@/features/transactions/transactionSlice';
 import { useSelector } from 'react-redux';
@@ -16,7 +16,19 @@ interface IDashboardHero {
 }
 
 const DashboardHero = () => {
-  const { firstName } = accountData;
+  const [userName, setUserName] = useState('Usuário');
+
+  useEffect(() => {
+    const cookies = document.cookie.split(';');
+    const parsedCookies = cookies.map((cookie) => cookie.trim());
+    const userCookie = parsedCookies.find((cookie) =>
+      cookie.startsWith('username=')
+    );
+    if (userCookie) {
+      const value = userCookie.split('=')[1];
+      setUserName(decodeURIComponent(value));
+    }
+  }, []);
   const { accountLabel, amountLabel } = dashboardHeroData as IDashboardHero;
 
   const [isAmountVisible, setIsAmountVisible] = useState<boolean>(true);
@@ -33,7 +45,7 @@ const DashboardHero = () => {
       <Graphism className="lg:hidden absolute bottom-0 right-0 md:right-auto md:left-0 w-[9rem] md:w-[11.25rem] h-auto" />
       <Graphism className="lg:hidden absolute top-0 left-0 md:left-auto md:right-0 w-[9rem] md:w-[11.25rem] h-auto rotate-180" />
       <div className="flex-1">
-        <h1 className="font-bold text-white text-2xl mb-6">{`Olá, ${firstName}! :)`}</h1>
+        <h1 className="font-bold text-white text-2xl mb-6">{`Olá, ${userName}! :)`}</h1>
         <span className="text-white text-sm">{getCurrentDate}</span>
         <ManWithMoney className="hidden md:block lg:hidden w-[17.6875rem] h-auto mt-12" />
       </div>
