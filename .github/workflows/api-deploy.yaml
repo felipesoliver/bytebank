@@ -1,0 +1,40 @@
+name: Deploy Node API to Elastic Beanstalk
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    permissions:
+      id-token: write
+      contents: read
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::025380395238:role/GitHubActions-ElasticBeanstalk
+          aws-region: us-east-2
+
+      - name: Create deployment package
+        run: |
+          cd app-with-zones/api
+          zip -r ../../app.zip . -x '*.git*' 'node_modules/*'
+        shell: bash
+
+      - name: Deploy to Elastic Beanstalk
+        uses: einaregilsson/beanstalk-deploy@v21
+        with:
+          application_name: bytebank-api
+          environment_name: Bytebank-api-env
+          version_label: github-${{ github.run_id }}
+          region: us-east-2
+          deployment_package: app.zip
+
