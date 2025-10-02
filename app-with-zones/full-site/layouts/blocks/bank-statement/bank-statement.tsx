@@ -8,17 +8,21 @@ import EditIcon from '@/assets/icons/edit.svg';
 import { currencyFormatedToReal } from '@/utils/currency';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
-import { formatMonth } from '@/utils/date';
-import { getStatement } from '@/app/api/statement';
+import { formatDate, formatMonth } from '@/utils/date';
+import { getUser } from '@/app/api/user';
 
 const BankStatement = () => {
   const { title } = bankStatementData as IBankStatement;
   const [transactions, setTransactions] = useState<IBankStatementItem[]>([]);
 
   useEffect(() => {
-    getStatement()
-    .then((res) => setTransactions(res))
-    .catch((err) => console.error(err))
+    getUser()
+    .then((res) => {
+      setTransactions(res?.statement);
+    })
+    .catch((err) => {
+      console.error('Error to verify user data', err)
+    })
   }, []);
 
   return (
@@ -44,7 +48,7 @@ const BankStatement = () => {
               <p className="!leading-none">
                 {transaction.type === 'Credit' ? 'Depósito' : 'Transferência'}
               </p>
-              <span className="text-xs text-[#8B8B8B]">{transaction.date}</span>
+              <span className="text-xs text-[#8B8B8B]">{formatDate(transaction.date)}</span>
             </div>
             <span className="font-semibold">{`${currencyFormatedToReal(
               transaction.value

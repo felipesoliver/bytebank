@@ -13,7 +13,7 @@ const transactionSlice = createSlice({
   initialState,
   reducers: {
     addTransaction: (state, action: PayloadAction<IBankStatementItem>) => {
-      let amount = Math.abs(action.payload.amount);
+      let amount = Math.abs(action.payload.value);
 
       if (action.payload.type !== 'deposit') {
         amount = -amount;
@@ -22,7 +22,7 @@ const transactionSlice = createSlice({
       state.transactions.push({
         ...action.payload,
         id: state.transactions.length + 1,
-        amount,
+        value: amount,
       });
     },
     removeTransaction: (state, action: PayloadAction<number>) => {
@@ -48,7 +48,7 @@ const transactionSlice = createSlice({
       if (index !== -1) {
         const existing = state.transactions[index];
 
-        let amount = updated.amount ?? existing.amount;
+        let amount = updated.value ?? existing.value;
 
         if (updated.type && updated.type !== 'deposit') {
           amount = -Math.abs(amount);
@@ -59,7 +59,7 @@ const transactionSlice = createSlice({
         state.transactions[index] = {
           ...existing,
           ...updated,
-          amount,
+          value: amount,
         };
       }
     },
@@ -76,7 +76,7 @@ export const selectTransactions = createSelector(
 export const selectBalance = createSelector(
   selectTransactions,
   (transactions: IBankStatementItem[]) =>
-    transactions.reduce((balance: number, t) => balance + t.amount, 0)
+    transactions.reduce((balance: number, t) => balance + t.value, 0)
 );
 
 export const { addTransaction, removeTransaction, updateTransaction } =

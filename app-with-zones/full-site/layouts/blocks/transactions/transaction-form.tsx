@@ -9,7 +9,6 @@ import { getBalanceByBankStatement } from '@/utils/bank-statement-calc';
 import { toast } from 'react-toastify';
 import { createTransaction } from '@/app/api/transactions';
 import { getUser } from '@/app/api/user';
-import { getStatement } from '@/app/api/statement';
 
 const TransactionForm = ({
   transactionType,
@@ -22,22 +21,14 @@ const TransactionForm = ({
   const [userId, setUserId] = useState<string>('');
   const [amount, setAmount] = useState<string>('');
 
-
   useEffect(() => {
     getUser()
     .then((res) => {
-      setUserId(res.result[0]?.id)
+      setUserId(res?.user[0]?.id)
+      setCurrentBalance(getBalanceByBankStatement(res?.statement) || 0)
     })
     .catch((err) => {
       console.error('Error to verify user data', err)
-    })
-
-    getStatement()
-    .then((res) => {
-      setCurrentBalance(getBalanceByBankStatement(res) || 0)
-    })
-    .catch((err) => {
-      console.error('Error to verify statement data', err)
     })
   }, []);
 

@@ -8,7 +8,7 @@ export function getBalanceByBankStatement(transactions: IBankStatementItem[]): n
   }
 
   transactions.forEach((transaction) => {
-    if (transaction.type === "credit") {
+    if (transaction.type === "Credit") {
       balance += transaction.value
     } else {
       balance -= transaction.value

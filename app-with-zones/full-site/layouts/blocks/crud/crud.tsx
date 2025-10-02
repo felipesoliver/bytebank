@@ -1,11 +1,12 @@
-import React, { useState } from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useEffect, useState } from 'react';
 import { bankStatementData, transactionsData } from '@/data/global-data';
+import useLocalStorage from '@/hooks/use-local-storage';
 import {
   IBankStatement,
   IBankStatementItem,
   ITransaction,
 } from '@/types/types';
-
 
 import EditIcon from '@/assets/icons/edit.svg';
 import DeleteIcon from '@/assets/icons/delete.svg';
@@ -13,16 +14,11 @@ import Cta from '@/components/cta';
 import CustomSelect from '@/components/select';
 import Input from '@/components/input';
 import { formatDate, formatMonth, toInputDateFormat } from '@/utils/date';
+import { getBalanceByBankStatement } from '@/utils/bank-statement-calc';
 
-import { toast } from 'react-toastify';
-import { RootState } from '@/store';
-import { useSelector } from 'react-redux';
+import {toast} from 'react-toastify'
+import { getUser } from '@/app/api/user';
 import { currencyFormatedToReal } from '@/utils/currency';
-import { useDispatch } from 'react-redux';
-import {
-  removeTransaction,
-  updateTransaction,
-} from '@/features/transactions/transactionSlice';
 
 const Crud = () => {
   const { subtitle } = bankStatementData as IBankStatement;
@@ -33,59 +29,63 @@ const Crud = () => {
     placeholderInput,
   } = transactionsData as ITransaction;
 
+  const [currentStatement, setCurrentStatement] =
+    useState<IBankStatementItem[]>([]);
   const [date, setDate] = useState<string>('');
   const [amount, setAmount] = useState<string>('');
   const [selectedTransaction, setSelectedTransaction] = useState<string>('');
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [currentEditing, setCurrentEditing] = useState<number>(-1);
 
-  const transactionsStore = useSelector(
-    (state: RootState) => state.transactions.transactions
-  );
+  const calculatedBalance = getBalanceByBankStatement(currentStatement)
 
-  const dispatch = useDispatch();
+  useEffect(() => {
+    getUser()
+    .then((res) => {
+      setCurrentStatement(res?.statement);
+    })
+    .catch((err) => {
+      console.error('Error to verify user data', err)
+    })
+  }, []);
 
-  const editStatementItem = (index: number) => {
+  const updatedStatement = (index: number) => {
     setIsEditing(true);
     setCurrentEditing(index);
-    const item = transactionsStore[index];
+    const item = currentStatement[index];
     setDate(toInputDateFormat(item.date));
-    setAmount(item.amount.toString());
+    setAmount(item.value.toString());
     setSelectedTransaction(item.type);
   };
 
-  const deleteStatementItem = (id?: number) => {
-    if (typeof id !== 'number') {
-      toast.error('Erro ao excluir transação: ID inválido');
-      return;
-    }
-
-    dispatch(removeTransaction(id));
+  const deleteStatementItem = (index: number) => {
+    // setValue(currentStatement.filter((_, i) => i !== index));
     toast.success('Transação excluída com sucesso');
   };
 
-  const update = (e: React.FormEvent) => {
+  const handleSave = (e: React.FormEvent) => {
     e.preventDefault();
 
     if (currentEditing === -1) return;
-    const transactionToUpdate = transactionsStore[currentEditing];
-    if (!transactionToUpdate) return;
+    const updatedStatement = [...currentStatement];
 
-    const updatedFields: Partial<IBankStatementItem> = {
+    const isInsufficientBalance = () => selectedTransaction === 'Debit' && (calculatedBalance - Number(amount)) < 0
+
+    if (isInsufficientBalance()) {
+      toast.warning('Saldo insuficiente');
+      return;
+    }
+
+    updatedStatement[currentEditing] = {
       type: selectedTransaction,
-      month: formatMonth(date),
-      amount: Number(amount),
+      value: Number(amount),
       date: formatDate(date),
-    };
+    } as IBankStatementItem;
 
-    dispatch(
-      updateTransaction({
-        id: transactionToUpdate?.id,
-        updated: updatedFields,
-      })
-    );
+    setCurrentStatement(updatedStatement);
     setCurrentEditing(-1);
     setIsEditing(false);
+
     toast.success('Transação atualizada com sucesso');
   };
 
@@ -93,7 +93,7 @@ const Crud = () => {
     <section className="lg:col-span-3 rounded-lg bg-white px-6 py-8">
       <h2 className="text-[1.5625rem] font-semibold">{subtitle}</h2>
       <ul>
-        {transactionsStore.map((transaction, index) => (
+        {currentStatement.map((transaction, index) => (
           <li
             key={`transaction-${index}`}
             className="relative group flex flex-col gap-2 pt-6 pb-2 border-b border-green"
@@ -101,9 +101,9 @@ const Crud = () => {
             {isEditing && currentEditing === index ? (
               <form
                 className="flex flex-col lg:flex-row lg:items-center flex-wrap justify-between gap-7 lg:gap-3 min-h-[4.5625rem] py-4 lg:py-0"
-                onSubmit={update}
+                onSubmit={handleSave}
               >
-                <div className="flex gap-8 md:gap-2 lg:gap-2 flex-col md:flex-row lg:flex-row">
+                <div className='flex gap-8 md:gap-2 lg:gap-2 flex-col md:flex-row lg:flex-row'>
                   <fieldset className="relative">
                     <label className="absolute -top-5 left-0 text-xs text-green">
                       {placeholderSelect}
@@ -171,36 +171,32 @@ const Crud = () => {
               <>
                 <button
                   className="absolute top-2 right-8 lg:opacity-0 lg:group-hover:opacity-100 duration-200 transition-all"
-                  onClick={() => editStatementItem(index)}
+                  onClick={() => updatedStatement(index)}
                 >
                   <EditIcon className="w-6 h-6" />
                 </button>
                 <button
                   className="absolute top-2 right-0 lg:opacity-0 lg:group-hover:opacity-100 duration-200 transition-all"
-                  onClick={() =>
-                    deleteStatementItem(transactionsStore[index].id)
-                  }
+                  onClick={() => deleteStatementItem(index)}
                 >
                   <DeleteIcon className="w-6 h-6" />
                 </button>
-                <span className="text-xs text-green font-semibold">
-                  {transaction.month}
+                <span className="w-fit text-xs text-green font-semibold">
+                  {formatMonth(transaction.date)}
                 </span>
                 <div className="flex items-center justify-between">
                   <p className="!leading-none">
-                    {transaction.type === 'deposit'
+                    {transaction.type === 'Credit'
                       ? 'Depósito'
                       : 'Transferência'}
                   </p>
                   <span className="text-xs text-[#8B8B8B]">
-                    {transaction.date}
+                    {formatDate(transaction.date)}
                   </span>
                 </div>
-                <span className="font-semibold">
-                  <span className="font-semibold">{`${currencyFormatedToReal(
-                    transaction.amount
-                  )}`}</span>
-                </span>
+                <span className="font-semibold">{currencyFormatedToReal(
+                  transaction.value
+                )}</span>
               </>
             )}
           </li>

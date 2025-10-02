@@ -7,8 +7,8 @@ import ManWithMoney from '@/assets/images/man-w-money-ilustration.svg';
 import Graphism from '@/assets/images/graphism.svg';
 import { useState, useEffect } from 'react';
 import { twMerge } from 'tailwind-merge';
-import { selectBalance } from '@/features/transactions/transactionSlice';
-import { useSelector } from 'react-redux';
+import { getUser } from '@/app/api/user';
+import { getBalanceByBankStatement } from '@/utils/bank-statement-calc';
 
 interface IDashboardHero {
   amountLabel: string;
@@ -17,28 +17,23 @@ interface IDashboardHero {
 
 const DashboardHero = () => {
   const [userName, setUserName] = useState('Usuário');
+  const { accountLabel, amountLabel } = dashboardHeroData as IDashboardHero;
+  const [isAmountVisible, setIsAmountVisible] = useState<boolean>(true);
+  const [currentBalance, setCurrentBalance] = useState<number>(0)
 
   useEffect(() => {
-    const cookies = document.cookie.split(';');
-    const parsedCookies = cookies.map((cookie) => cookie.trim());
-    const userCookie = parsedCookies.find((cookie) =>
-      cookie.startsWith('username=')
-    );
-    if (userCookie) {
-      const value = userCookie.split('=')[1];
-      setUserName(decodeURIComponent(value));
-    }
+    getUser()
+    .then((res) => {
+      setUserName(res?.user[0]?.username);
+      setCurrentBalance(getBalanceByBankStatement(res?.statement) || 0)
+    })
+    .catch((err) => console.error(err))
   }, []);
-  const { accountLabel, amountLabel } = dashboardHeroData as IDashboardHero;
-
-  const [isAmountVisible, setIsAmountVisible] = useState<boolean>(true);
-
-  const calculatedBalance = useSelector(selectBalance);
 
   const balanceFormatted = new Intl.NumberFormat('pt-BR', {
     style: 'currency',
     currency: 'BRL',
-  }).format(calculatedBalance);
+  }).format(currentBalance);
 
   return (
     <section className="relative flex flex-col bg-primary p-8 pb-7 pr-30 rounded-lg min-h-100 md:items-start md:flex-row sm:items-center xs:items-center overflow-hidden">
