@@ -1,14 +1,6 @@
 version: '3.9'
 
 services:
-  mongo:
-    image: mongo:4.4
-    container_name: bytebank-mongo
-    ports:
-      - '27017:27017'
-    networks:
-      - bytebank-network
-
   bytebank:
     build: ../app-with-zones/full-site
     image: bytebank:latest
@@ -35,17 +27,13 @@ services:
       - bytebank-api
 
   bytebank-api:
-    build:
-      context: ../app-with-zones/api
-    platform: linux/amd64 # 👈 MOVIDO PARA CÁ!
+    build: ../app-with-zones/api
     image: bytebank-api:latest
     container_name: bytebank-api
     networks:
       - bytebank-network
     ports:
       - '3002:3000'
-    depends_on:
-      - mongo
 
 networks:
   bytebank-network:

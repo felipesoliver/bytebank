@@ -16,6 +16,8 @@ class AccountController {
       getAccount: require('../feature/Account/getAccount'),
       saveTransaction: require('../feature/Transaction/saveTransaction'),
       getTransaction: require('../feature/Transaction/getTransaction'),
+      updateTransaction: require('../feature/Transaction/updateTransaction'),
+      deleteTransaction: require('../feature/Transaction/deleteTransaction'),
       getCard: require('../feature/Card/getCard'),
     }, di)
   }
@@ -48,7 +50,8 @@ class AccountController {
   async createTransaction(req, res) {
     const { saveTransaction, transactionRepository } = this.di
     const { accountId, value, type, from, to, anexo } = req.body
-    const transactionDTO = new TransactionDTO({ accountId, value, from, to, anexo, type, date: new Date() })
+    const urlAnexo = req.body.urlAnexo ?? req.body.urlanexo ?? null
+    const transactionDTO = new TransactionDTO({ accountId, value, from, to, anexo, urlAnexo, type, date: new Date() })
 
     const transaction = await saveTransaction({ transaction: transactionDTO, repository: transactionRepository })
     
@@ -56,6 +59,56 @@ class AccountController {
       message: 'Transação criada com sucesso',
       result: transaction
     })
+  }
+
+  async updateTransaction(req, res) {
+    const { updateTransaction, transactionRepository } = this.di
+    const { id } = req.params
+    const { value, type, from, to, anexo } = req.body
+    const urlAnexo = req.body.urlAnexo ?? req.body.urlanexo
+
+    const updates = {
+      value,
+      type,
+      from,
+      to,
+      anexo,
+      urlAnexo
+    }
+
+    Object.keys(updates).forEach((key) => updates[key] === undefined && delete updates[key])
+
+    try {
+      const transaction = await updateTransaction({ transactionId: id, updates, repository: transactionRepository })
+
+      if (!transaction) {
+        return res.status(404).json({ message: 'Transação não encontrada' })
+      }
+
+      res.status(200).json({
+        message: 'Transação atualizada com sucesso',
+        result: transaction
+      })
+    } catch (error) {
+      res.status(500).json({ message: 'Erro ao atualizar transação' })
+    }
+  }
+
+  async deleteTransaction(req, res) {
+    const { deleteTransaction, transactionRepository } = this.di
+    const { id } = req.params
+
+    try {
+      const deleted = await deleteTransaction({ transactionId: id, repository: transactionRepository })
+
+      if (!deleted) {
+        return res.status(404).json({ message: 'Transação não encontrada' })
+      }
+
+      res.status(204).send()
+    } catch (error) {
+      res.status(500).json({ message: 'Erro ao deletar transação' })
+    }
   }
 
   async getStatment(req, res) {

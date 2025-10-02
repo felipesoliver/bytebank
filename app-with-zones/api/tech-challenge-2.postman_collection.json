@@ -34,6 +34,75 @@
 			"response": []
 		},
 		{
+			"name": "Atualiza transação",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IklzcmFlbCAyIiwiZW1haWwiOiJ0ZXN0ZUBnbWFpbC5jb20iLCJwYXNzd29yZCI6InRlc3RlcyIsImlkIjoiNjc2MDcxMzNmODQwYmI5Nzg5MmViNjU3IiwiaWF0IjoxNzM0MzczNjg4LCJleHAiOjE3MzQ0MTY4ODh9.jtaRKSifN_j7rFWn1KkH5fykecwhXFW0G4wLqj24I-k",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"value\": 150,\r\n    \"type\": \"Credit\",\r\n    \"urlAnexo\": \"https://exemplo.com/recibo-atualizado.pdf\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/account/transaction/67607133f840bb97892eb660",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"account",
+						"transaction",
+						"67607133f840bb97892eb660"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Remove transação",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IklzcmFlbCAyIiwiZW1haWwiOiJ0ZXN0ZUBnbWFpbC5jb20iLCJwYXNzd29yZCI6InRlc3RlcyIsImlkIjoiNjc2MDcxMzNmODQwYmI5Nzg5MmViNjU3IiwiaWF0IjoxNzM0MzczNjg4LCJleHAiOjE3MzQ0MTY4ODh9.jtaRKSifN_j7rFWn1KkH5fykecwhXFW0G4wLqj24I-k",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "localhost:3000/account/transaction/67607133f840bb97892eb660",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"account",
+						"transaction",
+						"67607133f840bb97892eb660"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "auth",
 			"request": {
 				"method": "POST",
@@ -136,7 +205,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"accountId\": \"67607133f840bb97892eb659\",\r\n    \"value\": 200,\r\n    \"type\": \"Debit\"\r\n}",
+					"raw": "{\r\n    \"accountId\": \"67607133f840bb97892eb659\",\r\n    \"value\": 200,\r\n    \"type\": \"Debit\",\r\n    \"anexo\": \"Recibo\",\r\n    \"urlAnexo\": \"https://exemplo.com/recibo.pdf\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
