@@ -152,26 +152,22 @@ export const bankStatementData = {
   transactions: [
     {
       date: '18/06/2025',
-      month: 'Junho',
-      amount: 150,
+      value: 150,
       type: 'deposit',
     },
     {
       date: '21/06/2025',
-      month: 'Junho',
-      amount: 100,
+      value: 100,
       type: 'deposit',
     },
     {
       date: '21/06/2025',
-      month: 'Junho',
-      amount: 50,
+      value: 50,
       type: 'deposit',
     },
     {
       date: '21/06/2025',
-      month: 'Junho',
-      amount: 500,
+      value: 500,
       type: 'deposit',
     },
   ],
@@ -241,12 +237,12 @@ export const transactionsData = {
   transactionType: [
     {
       label: 'Depósito',
-      value: 'deposit',
+      value: 'Credit',
     },
     {
       label: 'DOC/TED',
-      value: 'transfer',
-    },
+      value: 'Debit',
+    }
   ],
   imageAlt:
     'Imagem de mulher com cartão de crédito. A mulher está segurando o cartão com a mão esquerda e está olhando para o lado direito. A imagem está em um fundo cinza.',

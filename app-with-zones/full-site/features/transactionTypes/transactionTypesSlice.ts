@@ -4,11 +4,11 @@ const initialState = {
   types: [
     {
       label: 'Depósito',
-      value: 'deposit',
+      value: 'Credit',
     },
     {
       label: 'DOC/TED',
-      value: 'transfer',
+      value: 'Debit',
     },
   ],
 };
@@ -20,4 +20,3 @@ const transactionTypeSlices = createSlice({
 });
 
 export default transactionTypeSlices.reducer;
-    

@@ -1,50 +1,44 @@
-import { useState } from 'react';
-
-import useLocalStorage from '@/hooks/use-local-storage';
+import { useEffect, useState } from 'react';
 
 import { TransactionFormProps } from './types';
-import { getCurrentMonth, getCurrentDateShort } from '@/utils/date';
 import CustomSelect from '@/components/select';
 import Input from '@/components/input';
 import Button from '@/components/button';
-import { IBankStatement, IBankStatementItem } from '@/types/types';
 import { getBalanceByBankStatement } from '@/utils/bank-statement-calc';
-import { bankStatementData } from '@/data/global-data';
 
 import { toast } from 'react-toastify';
-import { useDispatch } from 'react-redux';
-import { addTransaction } from '@/features/transactions/transactionSlice';
-import { triggerRefresh } from '@/features/extract/extractSlice';
+import { createTransaction } from '@/app/api/transactions';
+import { getUser } from '@/app/api/user';
 
 const TransactionForm = ({
   transactionType,
   placeholderInput,
   placeholderSelect,
 }: TransactionFormProps) => {
-  const { storedValue, setValue } = useLocalStorage<IBankStatementItem[]>(
-    'statement',
-    []
-  );
 
-  const { transactions } = bankStatementData as IBankStatement;
-  const { getValue: storedBalance } = useLocalStorage(
-    'statement',
-    transactions
-  );
-  const calculatedBalance = getBalanceByBankStatement(storedBalance());
-
-  const [selectedTransaction, setSelectedTransaction] = useState<string>('');
+  const [selectedTransaction, setSelectedTransaction] = useState<'Debit' | 'Credit'>('Credit');
+  const [currentBalance, setCurrentBalance] = useState<number>(0)
+  const [userId, setUserId] = useState<string>('');
   const [amount, setAmount] = useState<string>('');
 
+  useEffect(() => {
+    getUser()
+    .then((res) => {
+      setUserId(res?.user[0]?.id)
+      setCurrentBalance(getBalanceByBankStatement(res?.statement) || 0)
+    })
+    .catch((err) => {
+      console.error('Error to verify user data', err)
+    })
+  }, []);
+
   const isInsufficientBalance = () =>
-    selectedTransaction === 'transfer' &&
-    calculatedBalance - Number(amount) < 0;
+    selectedTransaction === 'Debit' &&
+    currentBalance - Number(amount) < 0;
 
   function showInsufficientBalanceMessage() {
     toast.warning('Saldo insuficiente');
   }
-
-  const dispatch = useDispatch();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -54,26 +48,23 @@ const TransactionForm = ({
       return;
     }
 
-    const newTransaction = {
-      type: selectedTransaction,
-      month: getCurrentMonth.replace(/^./, (str) => str.toUpperCase()),
-      amount: Number(amount),
-      date: getCurrentDateShort,
-    } as IBankStatementItem;
-
-    dispatch(
-      addTransaction({
+    const newTransaction = async () =>  {
+      await createTransaction({
+        accountId: userId,
         type: selectedTransaction,
-        month: getCurrentMonth.replace(/^./, (str) => str.toUpperCase()),
-        amount: Number(amount),
-        date: getCurrentDateShort,
+        value: Number(amount),
+        anexo: '',
+        from: '',
+        to: ''
       })
-    );
+      .catch((err) => {
+        console.error('Error to create new transaction', err)
+      })
+    }
+    newTransaction()
 
-    setValue([...storedValue, newTransaction]);
     toast.success('Transação realizada com sucesso!');
-    dispatch(triggerRefresh());
-    setSelectedTransaction('');
+    setSelectedTransaction('Credit');
     setAmount('');
   };
 
@@ -88,7 +79,7 @@ const TransactionForm = ({
         options={transactionType}
         placeholder={placeholderSelect}
         className="mb-8 max-w-[21.875rem]"
-        onValueChange={setSelectedTransaction}
+        onValueChange={(value) => setSelectedTransaction(value as 'Credit' | 'Debit')}
         defaultValue={selectedTransaction}
         arial-label="Tipo de transação"
         id="transaction-type"

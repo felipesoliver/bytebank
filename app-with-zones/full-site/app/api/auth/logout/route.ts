@@ -5,7 +5,15 @@ export async function POST() {
 
   response.cookies.set('token', '', {
     httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
+    secure: process.env.NEXT_PUBLIC_NODE_ENV === 'production',
+    sameSite: 'lax',
+    path: '/',
+    maxAge: 0,
+  });
+
+  response.cookies.set('id', '', {
+    httpOnly: true,
+    secure: process.env.NEXT_PUBLIC_NODE_ENV === 'production',
     sameSite: 'lax',
     path: '/',
     maxAge: 0,
