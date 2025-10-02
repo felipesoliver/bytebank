@@ -17,7 +17,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Configure AWS credentials
+      - name: Configure AWS credentials (OIDC)
         uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: arn:aws:iam::025380395238:role/GitHubActions-ElasticBeanstalk
@@ -29,12 +29,17 @@ jobs:
           zip -r ../../app.zip . -x '*.git*' 'node_modules/*'
         shell: bash
 
-      - name: Deploy to Elastic Beanstalk
-        uses: einaregilsson/beanstalk-deploy@v21
-        with:
-          application_name: bytebank-api
-          environment_name: Bytebank-api-env
-          version_label: github-${{ github.run_id }}
-          region: us-east-2
-          deployment_package: app.zip
+      - name: Install EB CLI
+        run: pip install awsebcli
 
+      - name: Initialize EB application (if needed)
+        run: |
+          eb init bytebank-api --region us-east-2 --platform node.js
+        env:
+          AWS_DEFAULT_REGION: us-east-2
+
+      - name: Deploy to Elastic Beanstalk
+        run: |
+          eb deploy Bytebank-api-env --staged
+        env:
+          AWS_DEFAULT_REGION: us-east-2
