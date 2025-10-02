@@ -8,8 +8,8 @@ import EditIcon from '@/assets/icons/edit.svg';
 import { currencyFormatedToReal } from '@/utils/currency';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
-import { getStatement } from '@/services/statement';
 import { formatMonth } from '@/utils/date';
+import { getStatement } from '@/app/api/statement';
 
 const BankStatement = () => {
   const { title } = bankStatementData as IBankStatement;
@@ -32,7 +32,7 @@ const BankStatement = () => {
 
       <h2 className="text-[1.5625rem] font-semibold">{title}</h2>
       <ul>
-        {transactions.map((transaction: IBankStatementItem, index) => (
+        {transactions?.map((transaction: IBankStatementItem, index) => (
           <li
             key={`transaction-${index}`}
             className="flex flex-col gap-2 pt-6 pb-2 border-b border-green"
