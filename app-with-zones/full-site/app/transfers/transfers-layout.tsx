@@ -2,8 +2,6 @@
 
 import AsideNav from '@/layouts/blocks/aside-nav';
 import Crud from '@/layouts/blocks/crud';
-import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store';
 

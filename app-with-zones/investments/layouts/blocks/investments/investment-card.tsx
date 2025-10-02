@@ -1,3 +1,5 @@
+'use client'
+
 import InvestmentCardLayout from './investment-card-layout'
 import InvestmentHeader from './investment-header'
 import InvestmentRates from './investment-rates'

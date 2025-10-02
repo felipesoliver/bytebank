@@ -11,6 +11,7 @@ import { useDispatch } from 'react-redux';
 import { AppDispatch } from '@/store';
 import { setIsLoggedIn } from '@/features/auth/authSlice';
 import { useRouter } from 'next/navigation';
+import { setUserAuthenticated } from '@/features/user/userSlice';
 
 export function LoginForm() {
   const [email, setEmail] = useState('');
@@ -28,6 +29,7 @@ export function LoginForm() {
       if (response.result.token) {
         dispatch(setIsAuthModalOpen(false));
         dispatch(setIsLoggedIn(true));
+        dispatch(setUserAuthenticated(email));
 
         router.push('/dashboard');
       }
