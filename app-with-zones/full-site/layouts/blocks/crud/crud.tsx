@@ -1,7 +1,5 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
 import { bankStatementData, transactionsData } from '@/data/global-data';
-import useLocalStorage from '@/hooks/use-local-storage';
 import {
   IBankStatement,
   IBankStatementItem,
@@ -19,6 +17,7 @@ import { getBalanceByBankStatement } from '@/utils/bank-statement-calc';
 import {toast} from 'react-toastify'
 import { getUser } from '@/app/api/user';
 import { currencyFormatedToReal } from '@/utils/currency';
+import { deleteTransaction, updateTransaction } from '@/services/transactions';
 
 const Crud = () => {
   const { subtitle } = bankStatementData as IBankStatement;
@@ -29,11 +28,10 @@ const Crud = () => {
     placeholderInput,
   } = transactionsData as ITransaction;
 
-  const [currentStatement, setCurrentStatement] =
-    useState<IBankStatementItem[]>([]);
+  const [currentStatement, setCurrentStatement] = useState<IBankStatementItem[]>([]);
   const [date, setDate] = useState<string>('');
   const [amount, setAmount] = useState<string>('');
-  const [selectedTransaction, setSelectedTransaction] = useState<string>('');
+  const [selectedTransaction, setSelectedTransaction] = useState<'Credit' | 'Debit'>('Credit');
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [currentEditing, setCurrentEditing] = useState<number>(-1);
 
@@ -42,32 +40,42 @@ const Crud = () => {
   useEffect(() => {
     getUser()
     .then((res) => {
-      setCurrentStatement(res?.statement);
+      setCurrentStatement(res?.statement as IBankStatementItem[]);
     })
     .catch((err) => {
       console.error('Error to verify user data', err)
     })
   }, []);
 
-  const updatedStatement = (index: number) => {
+  const handleUpdate = async (index: number) => {
     setIsEditing(true);
     setCurrentEditing(index);
+
     const item = currentStatement[index];
     setDate(toInputDateFormat(item.date));
     setAmount(item.value.toString());
     setSelectedTransaction(item.type);
   };
 
-  const deleteStatementItem = (index: number) => {
-    // setValue(currentStatement.filter((_, i) => i !== index));
+  const handleDelete = async (id: string) => {
+    await deleteTransaction({ id });
+
+    getUser()
+    .then((res) => {
+      setCurrentStatement(res?.statement as IBankStatementItem[]);
+    })
+    .catch((err) => {
+      console.error('Error to verify user data', err)
+    })
+
     toast.success('Transação excluída com sucesso');
   };
 
-  const handleSave = (e: React.FormEvent) => {
+  const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (currentEditing === -1) return;
-    const updatedStatement = [...currentStatement];
+    const handleUpdate = [...currentStatement];
 
     const isInsufficientBalance = () => selectedTransaction === 'Debit' && (calculatedBalance - Number(amount)) < 0
 
@@ -76,13 +84,26 @@ const Crud = () => {
       return;
     }
 
-    updatedStatement[currentEditing] = {
+    handleUpdate[currentEditing] = {
       type: selectedTransaction,
       value: Number(amount),
       date: formatDate(date),
     } as IBankStatementItem;
 
-    setCurrentStatement(updatedStatement);
+    await updateTransaction({
+      id: currentStatement[currentEditing].id as string,
+      type: selectedTransaction,
+      value: Number(amount) }
+    )
+
+    getUser()
+    .then((res) => {
+      setCurrentStatement(res?.statement as IBankStatementItem[]);
+    })
+    .catch((err) => {
+      console.error('Error to verify user data', err)
+    })
+
     setCurrentEditing(-1);
     setIsEditing(false);
 
@@ -96,7 +117,7 @@ const Crud = () => {
         {currentStatement.map((transaction, index) => (
           <li
             key={`transaction-${index}`}
-            className="relative group flex flex-col gap-2 pt-6 pb-2 border-b border-green"
+            className="relative group flex flex-col gap-2 pt-6 pb-2 border-b border-green opacity-0 animate-fadein"
           >
             {isEditing && currentEditing === index ? (
               <form
@@ -171,13 +192,13 @@ const Crud = () => {
               <>
                 <button
                   className="absolute top-2 right-8 lg:opacity-0 lg:group-hover:opacity-100 duration-200 transition-all"
-                  onClick={() => updatedStatement(index)}
+                  onClick={() => handleUpdate(index)}
                 >
                   <EditIcon className="w-6 h-6" />
                 </button>
                 <button
                   className="absolute top-2 right-0 lg:opacity-0 lg:group-hover:opacity-100 duration-200 transition-all"
-                  onClick={() => deleteStatementItem(index)}
+                  onClick={() => handleDelete(transaction.id as string)}
                 >
                   <DeleteIcon className="w-6 h-6" />
                 </button>

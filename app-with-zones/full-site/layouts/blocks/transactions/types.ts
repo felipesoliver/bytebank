@@ -1,6 +1,6 @@
 export interface Option {
   label: string;
-  value: string;
+  value: 'Credit' | 'Debit';
 }
 
 export interface TransactionFormProps {
