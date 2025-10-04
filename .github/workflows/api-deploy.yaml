@@ -1,4 +1,4 @@
-name: Deploy Node API to Elastic Beanstalk
+name: Deploy Docker Hub image to Elastic Beanstalk
 
 on:
   push:
@@ -15,7 +15,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Configure AWS credentials (OIDC)
         uses: aws-actions/configure-aws-credentials@v4
@@ -23,23 +23,34 @@ jobs:
           role-to-assume: arn:aws:iam::025380395238:role/GitHubActions-ElasticBeanstalk
           aws-region: us-east-2
 
-      - name: Create deployment package
-        run: |
-          cd app-with-zones/api
-          zip -r ../../app.zip . -x '*.git*' 'node_modules/*'
-        shell: bash
-
-      - name: Install EB CLI
+      - name: Install Elastic Beanstalk CLI
         run: pip install awsebcli
 
-      - name: Initialize EB application (if needed)
+      - name: Prepare Docker deployment package
         run: |
-          eb init bytebank-api --region us-east-2 --platform node.js
-        env:
-          AWS_DEFAULT_REGION: us-east-2
+          # Create a Dockerrun.aws.json file that points to your Docker Hub image
+          cat > Dockerrun.aws.json <<EOF
+          {
+            "AWSEBDockerrunVersion": "1",
+            "Image": {
+              "Name": "rukovis/bytebank-api:latest",
+              "Update": "true"
+            },
+            "Ports": [
+              { "ContainerPort": 3000 }
+            ]
+          }
+          EOF
+
+          # Zip the Dockerrun file for Elastic Beanstalk
+          zip -r app.zip Dockerrun.aws.json
+
+      - name: Show package contents (debug)
+        run: unzip -l app.zip
 
       - name: Deploy to Elastic Beanstalk
         run: |
-          eb deploy Bytebank-api-env --staged
+          eb init bytebank-api --region us-east-2 --platform docker
+          eb deploy Bytebank-docker-env --staged
         env:
           AWS_DEFAULT_REGION: us-east-2
