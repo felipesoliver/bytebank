@@ -14,9 +14,9 @@ type Story = StoryObj<typeof meta>
 export const Default: Story = {
   args: {
     options: [
-      { label: 'Opção 1', value: '1' },
-      { label: 'Opção 2', value: '2' },
-      { label: 'Opção 3', value: '3' },
+      { label: 'Opção 1', value: 'Credit' },
+      { label: 'Opção 2', value: 'Debit' },
+      { label: 'Opção 3', value: 'Credit' },
     ],
     placeholder: 'Selecione uma opção',
     borderColor: 'blue',
@@ -26,9 +26,9 @@ export const Default: Story = {
 export const WithDefaultValue: Story = {
   args: {
     options: [
-      { label: 'Opção A', value: 'A' },
-      { label: 'Opção B', value: 'B' },
-      { label: 'Opção C', value: 'C' },
+      { label: 'Opção A', value: 'Credit' },
+      { label: 'Opção B', value: 'Debit' },
+      { label: 'Opção C', value: 'Credit' },
     ],
     defaultValue: 'B',
     placeholder: 'Escolha uma letra',
@@ -39,9 +39,9 @@ export const WithDefaultValue: Story = {
 export const CustomBorderColor: Story = {
   args: {
     options: [
-      { label: 'Vermelho', value: 'vermelho' },
-      { label: 'Verde', value: 'verde' },
-      { label: 'Azul', value: 'azul' },
+      { label: 'Vermelho', value: 'Credit' },
+      { label: 'Verde', value: 'Debit' },
+      { label: 'Azul', value: 'Credit' },
     ],
     placeholder: 'Cor favorita',
     borderColor: 'blue',

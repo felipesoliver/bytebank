@@ -25,14 +25,14 @@ export interface ICta {
 }
 
 interface IOption {
-  value: string;
+  value: 'Credit' | 'Debit';
   label: string;
 }
 
 export interface ICustomSelect {
   options: IOption[];
   placeholder?: string;
-  onValueChange?: (value: string ) => void;
+  onValueChange?: (value: 'Credit' | 'Debit' ) => void;
   defaultValue?: string;
   className?: string;
   borderColor?: 'blue' | 'green';
@@ -62,8 +62,8 @@ export interface IInput extends React.InputHTMLAttributes<HTMLInputElement> {
 export interface IBankStatementItem {
   date: string;
   value: number;
-  type: string;
-  id?: number;
+  type: 'Credit' | 'Debit';
+  id?: string;
 }
 
 export interface IBankStatement {
@@ -74,7 +74,7 @@ export interface IBankStatement {
 
 interface ITransactionType {
   label: string;
-  value: string;
+  value: 'Credit' | 'Debit';
 }
 
 export interface ITransaction {

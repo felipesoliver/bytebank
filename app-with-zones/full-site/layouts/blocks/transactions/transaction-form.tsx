@@ -7,8 +7,8 @@ import Button from '@/components/button';
 import { getBalanceByBankStatement } from '@/utils/bank-statement-calc';
 
 import { toast } from 'react-toastify';
-import { createTransaction } from '@/app/api/transactions';
 import { getUser } from '@/app/api/user';
+import { createTransaction } from '@/services/transactions';
 
 const TransactionForm = ({
   transactionType,
@@ -18,13 +18,11 @@ const TransactionForm = ({
 
   const [selectedTransaction, setSelectedTransaction] = useState<'Debit' | 'Credit'>('Credit');
   const [currentBalance, setCurrentBalance] = useState<number>(0)
-  const [userId, setUserId] = useState<string>('');
   const [amount, setAmount] = useState<string>('');
 
   useEffect(() => {
     getUser()
     .then((res) => {
-      setUserId(res?.user[0]?.id)
       setCurrentBalance(getBalanceByBankStatement(res?.statement) || 0)
     })
     .catch((err) => {
@@ -50,7 +48,6 @@ const TransactionForm = ({
 
     const newTransaction = async () =>  {
       await createTransaction({
-        accountId: userId,
         type: selectedTransaction,
         value: Number(amount),
         anexo: '',

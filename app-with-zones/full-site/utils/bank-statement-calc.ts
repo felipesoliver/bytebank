@@ -11,7 +11,7 @@ export function getBalanceByBankStatement(transactions: IBankStatementItem[]): n
     if (transaction.type === "Credit") {
       balance += transaction.value
     } else {
-      balance -= transaction.value
+      balance -= Math.abs(transaction.value)
     }
   })
 

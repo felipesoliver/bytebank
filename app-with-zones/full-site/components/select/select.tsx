@@ -110,7 +110,7 @@ const CustomSelect = ({
     setIsOpen(!isOpen)
   }
 
-  const handleSelect = (value: string) => {
+  const handleSelect = (value: 'Credit' | 'Debit') => {
     setSelectedValue(value)
     setIsOpen(false)
     onValueChange?.(value)

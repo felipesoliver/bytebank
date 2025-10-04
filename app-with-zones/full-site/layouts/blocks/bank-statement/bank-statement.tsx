@@ -39,7 +39,7 @@ const BankStatement = () => {
         {transactions?.map((transaction: IBankStatementItem, index) => (
           <li
             key={`transaction-${index}`}
-            className="flex flex-col gap-2 pt-6 pb-2 border-b border-green"
+            className="flex flex-col gap-2 pt-6 pb-2 border-b border-green opacity-0 animate-fadein"
           >
             <span className="text-xs text-green font-semibold">
               {formatMonth(transaction.date)}

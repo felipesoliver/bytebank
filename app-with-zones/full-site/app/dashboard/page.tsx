@@ -5,14 +5,8 @@ import AsideNav from '@/layouts/blocks/aside-nav';
 import DashboardHero from '@/layouts/blocks/dashboard-hero';
 import TransactionCard from '@/layouts/blocks/transactions';
 import BankStatement from '@/layouts/blocks/bank-statement';
-import { useSelector } from 'react-redux';
-import { RootState } from '@/store';
 
 export default function DashboardPage() {
-  const refreshExtract = useSelector(
-    (state: RootState) => state.extract.refreshExtract
-  );
-
   const [firstVisit, setFirstVisit] = useState(false);
 
   useEffect(() => {
@@ -36,7 +30,7 @@ export default function DashboardPage() {
           <DashboardHero />
           <TransactionCard />
         </div>
-        <BankStatement key={refreshExtract} />
+        <BankStatement />
       </div>
     </div>
   );
