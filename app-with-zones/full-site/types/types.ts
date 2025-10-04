@@ -25,7 +25,7 @@ export interface ICta {
 }
 
 interface IOption {
-  value: string;
+  value: 'Credit' | 'Debit';
   label: string;
 }
 
