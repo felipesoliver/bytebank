@@ -16,7 +16,7 @@ interface IDashboardHero {
 }
 
 const DashboardHero = () => {
-  const [userName, setUserName] = useState('Usuário');
+  const [userName, setUserName] = useState('');
   const { accountLabel, amountLabel } = dashboardHeroData as IDashboardHero;
   const [isAmountVisible, setIsAmountVisible] = useState<boolean>(true);
   const [currentBalance, setCurrentBalance] = useState<number>(0)

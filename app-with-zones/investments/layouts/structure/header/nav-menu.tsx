@@ -1,11 +1,12 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { IMenu } from './header'
 import { twMerge } from 'tailwind-merge'
 
 import Avatar from '@/assets/icons/avatar.svg'
 import Close from '@/assets/icons/close.svg'
-import { accountData, headerData } from '@/data/global-data'
+import { headerData } from '@/data/global-data'
 import { useRouter } from 'next/navigation'
+import { getUser } from '@/app/api/user'
 
 interface Properties {
   closeMenu: () => void
@@ -24,16 +25,26 @@ const NavMenu: React.FC<Properties> = ({
   openProfileMenu,
 }) => {
   const router = useRouter()
-  const { firstName, lastName } = accountData
+  const [userMail, setUserMail] = useState<string>('')
   const {
     loggedInMenu,
     profileMenu,
   } = headerData as IMenu
 
+  useEffect(() => {
+    getUser()
+    .then((res) => {
+      setUserMail(res?.user[0]?.email);
+    })
+    .catch((err) => {
+      console.error('Error to verify user data', err)
+    })
+  }, []);
+
   return (
         <>
           <div className='w-full flex items-center justify-end gap-4'>
-            <span className='hidden md:block'>{`${firstName} ${lastName}`}</span>
+            <span className='hidden md:block opacity-0 animate-fadein'>{userMail}</span>
             <button onClick={openProfileMenu} aria-label="Abrir menu do perfil do usuário">
               <span className="sr-only">Abrir menu de perfil</span>
               <Avatar className='w-10 h-10' />

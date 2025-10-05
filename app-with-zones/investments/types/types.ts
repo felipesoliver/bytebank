@@ -62,8 +62,8 @@ export interface IInput extends React.InputHTMLAttributes<HTMLInputElement> {
 export interface IBankStatementItem {
   date: string
   month: string
-  amount: number
-  type: 'deposit' | 'transfer'
+  value: number
+  type: 'Credit' | 'Debit'
 }
 
 export interface IBankStatement {

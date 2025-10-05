@@ -11,6 +11,8 @@ const AsideNav = () => {
   const {loggedInMenu} = headerData
   const router = usePathname()
 
+  console.log(router)
+
   return (
     <aside className='hidden md:block lg:col-span-2 rounded-lg lg:bg-white'>
       <nav className='lg:flex lg:justify-center'>
@@ -21,7 +23,7 @@ const AsideNav = () => {
               className={
                 twMerge(
                   'border-b lg:not-last:border-b hover:border-green hover:text-green min-w-28 font-medium',
-                  router === item.url ? 'border-green text-green font-bold' : 'border-transparent lg:border-black',
+                  index === 2 ? 'border-green text-green font-bold' : 'border-transparent lg:border-black',
                 )
               }
             >

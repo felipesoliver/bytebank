@@ -80,7 +80,7 @@ const NavMenu: React.FC<Properties> = ({
         <>
           {/* Menu logado */}
           <div className="w-full flex items-center justify-end gap-4">
-            <span className="hidden md:block">{userName}</span>
+            <span className="hidden md:block opacity-0 animate-fadein">{userName}</span>
             <button onClick={openProfileMenu} aria-label="Abrir menu do perfil">
               <Avatar className="w-10 h-10" />
             </button>
