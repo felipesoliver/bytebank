@@ -91,7 +91,7 @@
   --distance-medium: --spacing(24);
 
   /* ANIMATION */
-  --animate-fadein: fadeIn 0.3s cubic-bezier(0.455, 0.03, 0.515, 0.955) forwards;
+  --animate-fadein: fadeIn 0.3s cubic-bezier(0.455, 0.03, 0.515, 0.955) forwards .8s;
   --animate-showup: showUp 0.2s ease-out forwards;
 
   @keyframes fadeIn {
