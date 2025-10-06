@@ -24,7 +24,7 @@ export async function POST() {
     secure: process.env.NEXT_PUBLIC_NODE_ENV === 'production',
     sameSite: 'lax',
     path: '/',
-    maxAge: 60 * 60 * 24,
+    maxAge: 0,
   });
 
   response.cookies.set('email', '', {
@@ -32,7 +32,7 @@ export async function POST() {
     secure: process.env.NEXT_PUBLIC_NODE_ENV === 'production',
     sameSite: 'lax',
     path: '/',
-    maxAge: 60 * 60 * 24,
+    maxAge: 0,
   });
 
   return response;
