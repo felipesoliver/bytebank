@@ -15,10 +15,10 @@ export async function POST(req: Request) {
   if (token) {
     response.cookies.set('token', token, {
       httpOnly: false,
-      secure: process.env.NEXT_PUBLIC_NODE_ENV === 'production', // false em dev
+      secure: process.env.NEXT_PUBLIC_NODE_ENV === 'production',
       sameSite: 'lax',
       path: '/',
-      maxAge: 60 * 60 * 24, // 1 dia
+      maxAge: 60 * 60 * 24,
     });
   }
 

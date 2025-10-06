@@ -4,7 +4,7 @@ export async function POST() {
   const response = NextResponse.json({ message: 'Logout feito' });
 
   response.cookies.set('token', '', {
-    httpOnly: true,
+    httpOnly: false,
     secure: process.env.NEXT_PUBLIC_NODE_ENV === 'production',
     sameSite: 'lax',
     path: '/',
@@ -12,11 +12,27 @@ export async function POST() {
   });
 
   response.cookies.set('id', '', {
-    httpOnly: true,
+    httpOnly: false,
     secure: process.env.NEXT_PUBLIC_NODE_ENV === 'production',
     sameSite: 'lax',
     path: '/',
     maxAge: 0,
+  });
+
+  response.cookies.set('username', '', {
+    httpOnly: false,
+    secure: process.env.NEXT_PUBLIC_NODE_ENV === 'production',
+    sameSite: 'lax',
+    path: '/',
+    maxAge: 60 * 60 * 24,
+  });
+
+  response.cookies.set('email', '', {
+    httpOnly: false,
+    secure: process.env.NEXT_PUBLIC_NODE_ENV === 'production',
+    sameSite: 'lax',
+    path: '/',
+    maxAge: 60 * 60 * 24,
   });
 
   return response;
