@@ -17,6 +17,7 @@ interface IDashboardHero {
 }
 
 const DashboardHero = () => {
+  const [userName, setUserName] = useState('');
   const { accountLabel, amountLabel } = dashboardHeroData as IDashboardHero;
   const [isAmountVisible, setIsAmountVisible] = useState<boolean>(true);
   const [currentBalance, setCurrentBalance] = useState<number>(0)
@@ -27,6 +28,9 @@ const DashboardHero = () => {
       setCurrentBalance(getBalanceByBankStatement(res?.statement) || 0)
     })
     .catch((err) => console.error(err))
+
+    const name = getCookie('username')
+    setUserName(name ?? '')
   }, []);
 
   const balanceFormatted = new Intl.NumberFormat('pt-BR', {
@@ -39,7 +43,7 @@ const DashboardHero = () => {
       <Graphism className="lg:hidden absolute bottom-0 right-0 md:right-auto md:left-0 w-[9rem] md:w-[11.25rem] h-auto" />
       <Graphism className="lg:hidden absolute top-0 left-0 md:left-auto md:right-0 w-[9rem] md:w-[11.25rem] h-auto rotate-180" />
       <div className="flex-1 opacity-0 animate-fadein">
-        <h1 className="font-bold text-white text-2xl mb-6">{`Olá, ${getCookie('username')}! :)`}</h1>
+        <h1 className="font-bold text-white text-2xl mb-6">{`Olá, ${userName}! :)`}</h1>
         <span className="text-white text-sm">{getCurrentDate}</span>
         <ManWithMoney className="hidden md:block lg:hidden w-[17.6875rem] h-auto mt-12" />
       </div>
