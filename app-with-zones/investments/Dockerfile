@@ -17,6 +17,8 @@ COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
 # Uncomment the following line in case you want to disable telemetry during the build.
+ENV NEXT_PUBLIC_BASE_URL_API=http://bytebank-api:3000
+ENV NEXT_PUBLIC_NODE_ENV=development
 ENV NEXT_TELEMETRY_DISABLED=1
 
 RUN npm run build
@@ -27,6 +29,8 @@ WORKDIR /app
 
 ENV NODE_ENV=production
 # Uncomment the following line in case you want to disable telemetry during runtime.
+ENV NEXT_PUBLIC_BASE_URL_API=http://bytebank-api:3000
+ENV NEXT_PUBLIC_NODE_ENV=development
 ENV NEXT_TELEMETRY_DISABLED=1
 
 RUN addgroup --system --gid 1001 nodejs
