@@ -6,7 +6,7 @@ import Avatar from '@/assets/icons/avatar.svg'
 import Close from '@/assets/icons/close.svg'
 import { headerData } from '@/data/global-data'
 import { useRouter } from 'next/navigation'
-import { getUser } from '@/app/api/user'
+import { getCookie } from '@/utils/get-cookie'
 
 interface Properties {
   closeMenu: () => void
@@ -25,26 +25,21 @@ const NavMenu: React.FC<Properties> = ({
   openProfileMenu,
 }) => {
   const router = useRouter()
-  const [userMail, setUserMail] = useState<string>('')
+  const [email, setEmail] = useState<string>('')
   const {
     loggedInMenu,
     profileMenu,
   } = headerData as IMenu
 
   useEffect(() => {
-    getUser()
-    .then((res) => {
-      setUserMail(res?.user[0]?.email);
-    })
-    .catch((err) => {
-      console.error('Error to verify user data', err)
-    })
+    const mail = getCookie('email')
+    setEmail(mail ?? '')
   }, []);
 
   return (
         <>
           <div className='w-full flex items-center justify-end gap-4'>
-            <span className='hidden md:block opacity-0 animate-fadein'>{userMail}</span>
+            <span className='hidden md:block opacity-0 animate-fadein'>{email}</span>
             <button onClick={openProfileMenu} aria-label="Abrir menu do perfil do usuário">
               <span className="sr-only">Abrir menu de perfil</span>
               <Avatar className='w-10 h-10' />

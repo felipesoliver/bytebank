@@ -19,21 +19,5 @@ export async function POST() {
     maxAge: 0,
   });
 
-  response.cookies.set('username', '', {
-    httpOnly: false,
-    secure: process.env.NEXT_PUBLIC_NODE_ENV === 'production',
-    sameSite: 'lax',
-    path: '/',
-    maxAge: 0,
-  });
-
-  response.cookies.set('email', '', {
-    httpOnly: false,
-    secure: process.env.NEXT_PUBLIC_NODE_ENV === 'production',
-    sameSite: 'lax',
-    path: '/',
-    maxAge: 0,
-  });
-
   return response;
 }

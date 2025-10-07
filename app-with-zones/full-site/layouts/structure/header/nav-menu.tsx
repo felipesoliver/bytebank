@@ -16,6 +16,7 @@ import {
   setCurrentAuthModal,
 } from '@/features/modal/modalSlice';
 import { setIsLoggedIn } from '@/features/auth/authSlice';
+import { getCookie } from '@/utils/get-cookie';
 
 interface Properties {
   closeMenu: () => void;
@@ -40,16 +41,10 @@ const NavMenu: React.FC<Properties> = ({
 
   const authStatus = useSelector((state: RootState) => state.auth.isLoggedIn);
   const [authChecked, setAuthChecked] = useState(false);
-  const [userName, setUserName] = useState('');
+  const [email, setEmail] = useState('');
 
   useEffect(() => {
     async function checkAuthStatus() {
-      const user = localStorage.getItem('user');
-
-      if (user) {
-        setUserName(JSON.parse(user));
-      }
-
       try {
         const res = await fetch('/api/auth/status');
         const data = await res.json();
@@ -59,6 +54,9 @@ const NavMenu: React.FC<Properties> = ({
       } finally {
         setAuthChecked(true);
       }
+
+      const mail = getCookie('email')
+      setEmail(mail ?? '')
     }
 
     checkAuthStatus();
@@ -80,7 +78,7 @@ const NavMenu: React.FC<Properties> = ({
         <>
           {/* Menu logado */}
           <div className="w-full flex items-center justify-end gap-4">
-            <span className="hidden md:block opacity-0 animate-fadein">{userName}</span>
+            <span className="hidden md:block opacity-0 animate-fadein">{email}</span>
             <button onClick={openProfileMenu} aria-label="Abrir menu do perfil">
               <Avatar className="w-10 h-10" />
             </button>
