@@ -1,22 +1,27 @@
 'use client'
 
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import AsideNav from '@/layouts/blocks/aside-nav';
 import DashboardHero from '@/layouts/blocks/dashboard-hero';
 import TransactionCard from '@/layouts/blocks/transactions';
 import BankStatement from '@/layouts/blocks/bank-statement';
 import { twMerge } from 'tailwind-merge';
-import { RootState } from '@/store';
-import { useSelector } from 'react-redux';
 
 const DashboardLayout = () => {
-  const authStatus = useSelector((state: RootState) => state.auth.isLoggedIn);
+  const [firstVisit, setFirstVisit] = useState<boolean>(false);
+
+  useEffect(() => {
+    const visited = sessionStorage.getItem('dashboardVisited');
+    if (!visited) {
+      setFirstVisit(true);
+      sessionStorage.setItem('dashboardVisited', 'true');
+    }
+  }, []);
 
   return (
     <div
       className={twMerge(
-        'opacity-0',
-        authStatus && 'animate-fadeup',
+        firstVisit && 'opacity-0 animate-fadeup',
       )}
     >
       <div className="container grid grid-cols-1 lg:grid-cols-12 gap-5 py-5">
