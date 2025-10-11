@@ -92,6 +92,7 @@
 
   /* ANIMATION */
   --animate-fadein: fadeIn 0.3s cubic-bezier(0.455, 0.03, 0.515, 0.955) forwards .8s;
+  --animate-fadeup: fadeUp 1s cubic-bezier(0.455, 0.03, 0.515, 0.955) forwards;
   --animate-showup: showUp 0.2s ease-out forwards;
 
   @keyframes fadeIn {
@@ -100,6 +101,17 @@
     }
     100% {
       opacity: 100;
+    }
+  }
+
+  @keyframes fadeUp {
+    0% {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    100% {
+      opacity: 100;
+      transform: translateY(0);
     }
   }
 
