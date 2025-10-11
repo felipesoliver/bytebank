@@ -17,7 +17,6 @@ import { getBalanceByBankStatement } from '@/utils/bank-statement-calc';
 import {toast} from 'react-toastify'
 import { getUser } from '@/app/api/user';
 import { currencyFormatedToReal } from '@/utils/currency';
-import { deleteTransaction, updateTransaction } from '@/services/transactions';
 
 const Crud = () => {
   const { subtitle } = bankStatementData as IBankStatement;
@@ -47,6 +46,42 @@ const Crud = () => {
     })
   }, []);
 
+  const updateTransaction = async (
+    id: string,
+    type: 'Credit' | 'Debit',
+    value: number,
+  ) => {
+    try {
+      const res = await fetch(`/api/transactions/update/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ type, value }),
+      })
+
+      if (!res.ok) throw new Error('Failed to update transaction')
+      return await res.json()
+    } catch (error) {
+      console.error('Error updating transaction:', error)
+      throw error
+    }
+  }
+
+  const deleteTransaction = async (
+    id: string,
+  ) => {
+    try {
+      const res = await fetch(`/api/transactions/delete/${id}`, {
+        method: 'DELETE',
+      })
+
+      if (!res.ok) throw new Error('Failed to delete transaction')
+      return await res.json()
+    } catch (error) {
+      console.error('Error delete transaction:', error)
+      throw error
+    }
+  }
+
   const handleUpdate = async (index: number) => {
     setIsEditing(true);
     setCurrentEditing(index);
@@ -58,7 +93,7 @@ const Crud = () => {
   };
 
   const handleDelete = async (id: string) => {
-    await deleteTransaction({ id });
+    await deleteTransaction(id);
 
     getUser()
     .then((res) => {
@@ -90,10 +125,10 @@ const Crud = () => {
       date: formatDate(date),
     } as IBankStatementItem;
 
-    await updateTransaction({
-      id: currentStatement[currentEditing].id as string,
-      type: selectedTransaction,
-      value: Number(amount) }
+    await updateTransaction(
+      currentStatement[currentEditing].id as string,
+      selectedTransaction,
+      Number(amount)
     )
 
     getUser()

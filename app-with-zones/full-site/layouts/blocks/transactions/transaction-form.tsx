@@ -8,7 +8,6 @@ import { getBalanceByBankStatement } from '@/utils/bank-statement-calc';
 
 import { toast } from 'react-toastify';
 import { getUser } from '@/app/api/user';
-import { createTransaction } from '@/services/transactions';
 
 const TransactionForm = ({
   transactionType,
@@ -47,16 +46,25 @@ const TransactionForm = ({
     }
 
     const newTransaction = async () =>  {
-      await createTransaction({
-        type: selectedTransaction,
-        value: Number(amount),
-        anexo: '',
-        from: '',
-        to: ''
-      })
-      .catch((err) => {
-        console.error('Error to create new transaction', err)
-      })
+      try {
+        const res = await fetch('/api/transactions/create', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            type: selectedTransaction,
+            value: Number(amount),
+            anexo: '',
+            from: '',
+            to: ''
+          }),
+        })
+
+        if (!res.ok) throw new Error('Failed to create transaction')
+        return await res.json()
+      } catch (error) {
+        console.error(error)
+        throw error
+      }
     }
     newTransaction()
 
